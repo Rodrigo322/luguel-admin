@@ -4,8 +4,7 @@ import { useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { POLLING_INTERVAL_MS } from "@/lib/constants";
 import { notifyBrowser, requestBrowserNotificationPermission } from "@/lib/browser-notifications";
-import { listListings } from "@/services/listings-service";
-import { listCriticalReports } from "@/services/reports-service";
+import { getDashboardMetrics } from "@/services/dashboard-service";
 
 interface RiskSnapshot {
   pendingListings: number;
@@ -13,11 +12,11 @@ interface RiskSnapshot {
 }
 
 async function readRiskSnapshot(): Promise<RiskSnapshot> {
-  const [listings, reports] = await Promise.all([listListings({ status: "PENDING_VALIDATION" }), listCriticalReports()]);
+  const metrics = await getDashboardMetrics();
 
   return {
-    pendingListings: listings.length,
-    criticalReports: reports.length
+    pendingListings: metrics.pendingListings,
+    criticalReports: metrics.criticalReports
   };
 }
 
