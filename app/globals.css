@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+:root {
+  --shell: #040815;
+  --shell-elevated: #0b1226;
+  --shell-muted: #111a33;
+  --shell-foreground: #e9eefb;
+  --shell-foreground-dim: #95a3c8;
+  --accent: #8f90ff;
+  --accent-strong: #6a6cf6;
+  --danger: #ff5d7a;
+  --danger-muted: #39101c;
+  --success: #2de5a0;
+  --warning: #ffb84d;
+  --border-subtle: rgba(177, 188, 255, 0.2);
+}
+
+@theme inline {
+  --color-shell: var(--shell);
+  --color-shell-elevated: var(--shell-elevated);
+  --color-shell-muted: var(--shell-muted);
+  --color-shell-foreground: var(--shell-foreground);
+  --color-shell-foreground-dim: var(--shell-foreground-dim);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-danger: var(--danger);
+  --color-danger-muted: var(--danger-muted);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-border-subtle: var(--border-subtle);
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-ibm-plex-mono);
+}
+
+body {
+  background:
+    radial-gradient(circle at 85% -20%, rgba(129, 130, 255, 0.32), transparent 35%),
+    radial-gradient(circle at 20% 120%, rgba(255, 78, 127, 0.18), transparent 30%),
+    var(--shell);
+  color: var(--shell-foreground);
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+
+* {
+  border-color: var(--border-subtle);
+}
+
+::selection {
+  background: rgba(143, 144, 255, 0.35);
+  color: #ffffff;
+}
+
+.glass {
+  background: linear-gradient(180deg, rgba(23, 34, 65, 0.8), rgba(8, 13, 27, 0.9));
+  border: 1px solid rgba(150, 165, 255, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.card-glow {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 14px 32px rgba(3, 7, 18, 0.45);
+}
+
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(128, 140, 198, 0.45) transparent;
+}
+
+.scroll-thin::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: rgba(128, 140, 198, 0.45);
+  border-radius: 999px;
+}
+
+.pulse-dot {
+  animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
