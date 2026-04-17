@@ -1,35 +1,22 @@
 # Backend Gaps Mapeados para o Admin Web
 
-O painel foi integrado aos endpoints reais disponiveis no backend atual (`backend/src/interfaces/http/routes/*`).
+Estado atualizado em 17/04/2026 apos etapas de correcao.
 
-## Endpoints faltantes para fechamento total do escopo
+## Endpoints admin agora disponiveis
 
-1. Alteracao de role de usuario por admin
-- Esperado pelo frontend: `PATCH /api/v1/admin/users/:userId/role`
-- Disponivel hoje: apenas `PATCH /api/v1/users/me/role`
+- `PATCH /api/v1/admin/users/:userId/role`
+- `POST /api/v1/admin/listings/:listingId/approve`
+- `POST /api/v1/admin/listings/:listingId/reject`
+- `GET /api/v1/reviews`
+- `GET /api/v1/boosts`
+- `GET /api/v1/admin/reports` (filtros + paginacao)
+- `GET /api/v1/admin/reports/critical`
 
-2. Aprovacao/Reprovacao de anuncio na moderacao
-- Esperado pelo frontend:
-  - `POST /api/v1/admin/listings/:listingId/approve`
-  - `POST /api/v1/admin/listings/:listingId/reject`
-- Disponivel hoje:
-  - `POST /api/v1/admin/listings/:listingId/suspend`
-  - `POST /api/v1/admin/listings/:listingId/archive`
+## Gaps atuais
 
-3. Listagem de reviews para auditoria
-- Esperado pelo frontend: `GET /api/v1/reviews`
-- Disponivel hoje: apenas `POST /api/v1/reviews`
+Sem gaps criticos de endpoint para os fluxos principais do painel admin.
 
-4. Listagem de boosts
-- Esperado pelo frontend: `GET /api/v1/boosts`
-- Disponivel hoje: apenas `POST /api/v1/boosts`
+## Observacoes
 
-5. Listagem completa de reports
-- Esperado pelo frontend: `GET /api/v1/admin/reports` (com filtros/paginacao)
-- Disponivel hoje: apenas `GET /api/v1/admin/reports/critical`
-
-## Comportamento atual do frontend para esses gaps
-
-- Funcionalidades com endpoint ausente foram mantidas na UI com feedback explicito de indisponibilidade.
-- Nenhum dado foi mockado.
-- Nenhum fluxo foi hardcoded como sucesso sem endpoint real.
+- O modulo de notificacoes ainda opera com polling no frontend; nao ha websocket dedicado no backend.
+- A tela de reports agora usa listagem paginada real e filtros por status/risco/busca.

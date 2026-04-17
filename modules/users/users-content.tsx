@@ -117,23 +117,14 @@ export function UsersContent() {
                       return;
                     }
 
-                    roleMutation.mutate(
-                      { userId: selectedUser.id, role: nextRole },
-                      {
-                        onError: () => {
-                          // role endpoint ainda nao esta disponivel no backend.
-                        }
-                      }
-                    );
+                    roleMutation.mutate({ userId: selectedUser.id, role: nextRole });
                   }}
                 >
                   Salvar role
                 </Button>
               </div>
               {roleMutation.isError && (
-                <ErrorState
-                  message={`Alteracao de role indisponivel no backend atual: ${toErrorMessage(roleMutation.error)}`}
-                />
+                <ErrorState message={toErrorMessage(roleMutation.error)} />
               )}
             </div>
 

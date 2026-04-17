@@ -1,9 +1,16 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { listCriticalReports, reviewReport } from "@/services/reports-service";
+import { listCriticalReports, listReports, reviewReport, type ReportListFilters } from "@/services/reports-service";
 import { archiveListingByAdmin } from "@/services/listings-service";
 import { banUser } from "@/services/users-service";
+
+export function useReports(filters: ReportListFilters) {
+  return useQuery({
+    queryKey: ["reports", "list", filters],
+    queryFn: () => listReports(filters)
+  });
+}
 
 export function useCriticalReports() {
   return useQuery({

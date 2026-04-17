@@ -8,38 +8,92 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
 import { LoadingState } from "@/components/ui/loading-state";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 import {
-  useCriticalReports,
+  useReports,
   usePunishUser,
   useReviewReport,
   useTakeDownListing
 } from "@/modules/reports/queries";
-import type { ReportRecord } from "@/modules/shared/types";
+import type { ReportRecord, ReportStatus, RiskLevel } from "@/modules/shared/types";
 import { formatDateTime } from "@/lib/utils";
 import { toErrorMessage } from "@/lib/http-errors";
 
+const PAGE_SIZE = 10;
+
 export function ReportsContent() {
-  const reportsQuery = useCriticalReports();
+  const [search, setSearch] = useState("");
+  const [riskFilter, setRiskFilter] = useState<RiskLevel | "ALL">("ALL");
+  const [statusFilter, setStatusFilter] = useState<ReportStatus | "ALL">("ALL");
+  const [page, setPage] = useState(1);
   const [selectedReport, setSelectedReport] = useState<ReportRecord | null>(null);
   const [reason, setReason] = useState("Acao moderadora administrativa.");
+  const reportsQuery = useReports({
+    page,
+    pageSize: PAGE_SIZE,
+    search: search.trim() || undefined,
+    riskLevel: riskFilter === "ALL" ? undefined : riskFilter,
+    status: statusFilter === "ALL" ? undefined : statusFilter
+  });
   const reviewMutation = useReviewReport();
   const takeDownMutation = useTakeDownListing();
   const punishMutation = usePunishUser();
 
   if (reportsQuery.isLoading) {
-    return <LoadingState label="Carregando denuncias criticas..." />;
+    return <LoadingState label="Carregando denuncias..." />;
   }
 
   if (reportsQuery.isError) {
-    return <ErrorState message="Falha ao carregar denuncias criticas." />;
+    return <ErrorState message="Falha ao carregar denuncias." />;
   }
 
-  const reports = reportsQuery.data ?? [];
+  const reports = reportsQuery.data?.reports ?? [];
+  const pagination = reportsQuery.data?.pagination;
 
   return (
     <div className="space-y-5">
+      <div className="grid gap-3 rounded-2xl border border-border-subtle bg-shell-muted/50 p-4 lg:grid-cols-4">
+        <Input
+          value={search}
+          onChange={(event) => {
+            setSearch(event.target.value);
+            setPage(1);
+          }}
+          placeholder="Buscar por texto ou ID"
+        />
+        <Select
+          value={statusFilter}
+          onChange={(event) => {
+            setStatusFilter(event.target.value as ReportStatus | "ALL");
+            setPage(1);
+          }}
+        >
+          <option value="ALL">Todos status</option>
+          <option value="OPEN">OPEN</option>
+          <option value="TRIAGED">TRIAGED</option>
+          <option value="RESOLVED">RESOLVED</option>
+          <option value="REJECTED">REJECTED</option>
+        </Select>
+        <Select
+          value={riskFilter}
+          onChange={(event) => {
+            setRiskFilter(event.target.value as RiskLevel | "ALL");
+            setPage(1);
+          }}
+        >
+          <option value="ALL">Todos riscos</option>
+          <option value="LOW">LOW</option>
+          <option value="MEDIUM">MEDIUM</option>
+          <option value="HIGH">HIGH</option>
+          <option value="CRITICAL">CRITICAL</option>
+        </Select>
+        <div className="flex items-center justify-end gap-2 text-sm text-shell-foreground-dim">
+          <span>{pagination ? `${pagination.total} casos` : "0 casos"}</span>
+        </div>
+      </div>
+
       {reports.length === 0 ? (
-        <EmptyState title="Nenhuma denuncia critica" description="Fila critica de reports esta vazia no momento." />
+        <EmptyState title="Nenhuma denuncia encontrada" description="Ajuste os filtros para localizar casos." />
       ) : (
         <div className="grid gap-4 lg:grid-cols-[420px_1fr]">
           <div className="space-y-3">
@@ -52,10 +106,27 @@ export function ReportsContent() {
                 <h3 className="text-lg font-semibold">{report.reason}</h3>
                 <p className="line-clamp-2 text-sm text-shell-foreground-dim">{report.details ?? "Sem detalhes adicionais."}</p>
                 <Button variant="secondary" onClick={() => setSelectedReport(report)}>
-                  Revisar caso
+                  Abrir caso
                 </Button>
               </Card>
             ))}
+            {pagination && pagination.totalPages > 1 && (
+              <div className="flex items-center justify-between rounded-xl border border-border-subtle bg-shell-muted/40 p-2">
+                <Button variant="secondary" disabled={page <= 1} onClick={() => setPage((current) => current - 1)}>
+                  Anterior
+                </Button>
+                <span className="text-xs text-shell-foreground-dim">
+                  Pagina {pagination.page} de {pagination.totalPages}
+                </span>
+                <Button
+                  variant="secondary"
+                  disabled={page >= pagination.totalPages}
+                  onClick={() => setPage((current) => current + 1)}
+                >
+                  Proxima
+                </Button>
+              </div>
+            )}
           </div>
           <Card className="min-h-96">
             {!selectedReport && (

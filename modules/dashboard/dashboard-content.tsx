@@ -80,7 +80,7 @@ export function DashboardContent() {
         <Card>
           <h3 className="text-xl font-semibold">Risk Alerts</h3>
           <p className="mt-2 text-sm text-shell-foreground-dim">
-            {metrics.totalReports} denuncias criticas abertas no fluxo administrativo.
+            {metrics.totalReports} denuncias abertas no fluxo administrativo.
           </p>
         </Card>
       </section>
