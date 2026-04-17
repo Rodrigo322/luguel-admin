@@ -1,4 +1,3 @@
-import { BackendFeatureUnavailableError } from "@/lib/http-errors";
 import { api } from "@/services/http";
 import type { BoostRecord } from "@/modules/shared/types";
 
@@ -15,5 +14,6 @@ export async function createBoost(payload: CreateBoostPayload): Promise<BoostRec
 }
 
 export async function listBoosts(): Promise<BoostRecord[]> {
-  throw new BackendFeatureUnavailableError("listagem de impulsionamentos");
+  const response = await api.get<{ boosts: BoostRecord[] }>("/boosts");
+  return response.data.boosts;
 }

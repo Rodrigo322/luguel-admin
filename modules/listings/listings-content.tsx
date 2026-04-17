@@ -158,9 +158,7 @@ export function ListingsContent() {
             </div>
             {(approveMutation.isError || rejectMutation.isError) && (
               <ErrorState
-                message={`Aprovacao/Reprovacao depende de endpoints ainda ausentes no backend atual. ${toErrorMessage(
-                  approveMutation.error ?? rejectMutation.error
-                )}`}
+                message={toErrorMessage(approveMutation.error ?? rejectMutation.error)}
               />
             )}
             {(suspendMutation.isError || archiveMutation.isError) && (

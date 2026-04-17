@@ -1,4 +1,4 @@
-import { BackendFeatureUnavailableError } from "@/lib/http-errors";
+import { api } from "@/services/http";
 
 export interface ReviewListItem {
   id: string;
@@ -12,5 +12,6 @@ export interface ReviewListItem {
 }
 
 export async function listReviews(): Promise<ReviewListItem[]> {
-  throw new BackendFeatureUnavailableError("listagem de avaliacoes");
+  const response = await api.get<{ reviews: ReviewListItem[] }>("/reviews");
+  return response.data.reviews;
 }

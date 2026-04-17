@@ -30,11 +30,9 @@ export async function archiveListingByAdmin(listingId: string, reason: string): 
 }
 
 export async function approveListing(listingId: string): Promise<void> {
-  // Endpoint esperado para evolucao de backend:
   await api.post(`/admin/listings/${listingId}/approve`);
 }
 
 export async function rejectListing(listingId: string, reason: string): Promise<void> {
-  // Endpoint esperado para evolucao de backend:
   await api.post(`/admin/listings/${listingId}/reject`, { reason });
 }

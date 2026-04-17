@@ -46,6 +46,7 @@ export type ReportStatus = "OPEN" | "TRIAGED" | "RESOLVED" | "REJECTED";
 export interface ReportRecord {
   id: string;
   reporterId: string;
+  subjectUserId?: string;
   listingId?: string;
   rentalId?: string;
   reason: string;

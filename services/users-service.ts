@@ -17,7 +17,5 @@ export async function banUser(userId: string, reason: string): Promise<UserRecor
 }
 
 export async function updateUserRole(userId: string, role: Extract<UserRole, "LOCADOR" | "LOCATARIO">): Promise<void> {
-  // O backend atual nao expoe endpoint admin para alterar role de terceiros.
-  // Mantemos a chamada para endpoint esperado para evolucao futura.
   await api.patch(`/admin/users/${userId}/role`, { role });
 }

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { LoadingState } from "@/components/ui/loading-state";
 import { createBoostSchema, type CreateBoostSchema } from "@/schemas/boost-schemas";
 import { useBoostList, useCreateBoost } from "@/modules/boost/queries";
-import { BackendFeatureUnavailableError, toErrorMessage } from "@/lib/http-errors";
+import { toErrorMessage } from "@/lib/http-errors";
 import { formatCurrency } from "@/lib/utils";
 
 export function BoostContent() {
@@ -76,15 +76,7 @@ export function BoostContent() {
       <Card>
         <h2 className="mb-3 text-2xl font-semibold">Current Boost Campaigns</h2>
         {boostListQuery.isLoading && <LoadingState label="Carregando impulsionamentos..." />}
-        {boostListQuery.isError &&
-          (boostListQuery.error instanceof BackendFeatureUnavailableError ? (
-            <EmptyState
-              title="Listagem de boosts nao disponivel"
-              description="Backend atual possui apenas endpoint de criacao de boost. Inclua GET /boosts para monitoramento completo."
-            />
-          ) : (
-            <ErrorState message={toErrorMessage(boostListQuery.error)} />
-          ))}
+        {boostListQuery.isError && <ErrorState message={toErrorMessage(boostListQuery.error)} />}
         {!boostListQuery.isLoading && !boostListQuery.isError && (boostListQuery.data?.length ?? 0) === 0 && (
           <EmptyState title="Sem impulsionamentos ativos" description="Crie um novo boost para iniciar campanhas." />
         )}

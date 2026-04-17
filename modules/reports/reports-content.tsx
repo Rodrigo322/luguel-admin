@@ -95,7 +95,13 @@ export function ReportsContent() {
                   <Button
                     variant="danger"
                     loading={punishMutation.isPending}
-                    onClick={() => punishMutation.mutate({ userId: selectedReport.reporterId, reason })}
+                    disabled={!selectedReport.subjectUserId}
+                    onClick={() => {
+                      if (!selectedReport.subjectUserId) {
+                        return;
+                      }
+                      punishMutation.mutate({ userId: selectedReport.subjectUserId, reason });
+                    }}
                   >
                     Punir usuario
                   </Button>
@@ -111,6 +117,11 @@ export function ReportsContent() {
                   <ErrorState
                     message={toErrorMessage(reviewMutation.error ?? takeDownMutation.error ?? punishMutation.error)}
                   />
+                )}
+                {!selectedReport.subjectUserId && (
+                  <p className="text-xs text-shell-foreground-dim">
+                    Nao foi possivel identificar automaticamente o usuario alvo deste reporte.
+                  </p>
                 )}
               </div>
             )}

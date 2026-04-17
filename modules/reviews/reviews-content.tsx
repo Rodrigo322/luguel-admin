@@ -6,7 +6,6 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
 import { LoadingState } from "@/components/ui/loading-state";
 import { useReviews } from "@/modules/reviews/queries";
-import { BackendFeatureUnavailableError } from "@/lib/http-errors";
 
 export function ReviewsContent() {
   const reviewsQuery = useReviews();
@@ -16,17 +15,6 @@ export function ReviewsContent() {
   }
 
   if (reviewsQuery.isError) {
-    const error = reviewsQuery.error;
-
-    if (error instanceof BackendFeatureUnavailableError) {
-      return (
-        <EmptyState
-          title="Endpoint de listagem de reviews indisponivel"
-          description="O backend atual so expoe criacao de review. Para este modulo, e necessario endpoint GET de avaliacoes."
-        />
-      );
-    }
-
     return <ErrorState message="Falha ao carregar reviews." />;
   }
 
