@@ -13,7 +13,7 @@ import {
   useReports,
   usePunishUser,
   useReviewReport,
-  useTakeDownListing
+  useTakeDownContent
 } from "@/modules/reports/queries";
 import type { ReportRecord, ReportStatus, RiskLevel } from "@/modules/shared/types";
 import { formatDateTime } from "@/lib/utils";
@@ -36,7 +36,7 @@ export function ReportsContent() {
     status: statusFilter === "ALL" ? undefined : statusFilter
   });
   const reviewMutation = useReviewReport();
-  const takeDownMutation = useTakeDownListing();
+  const takeDownMutation = useTakeDownContent();
   const punishMutation = usePunishUser();
 
   if (reportsQuery.isLoading) {
@@ -154,11 +154,12 @@ export function ReportsContent() {
                   <Button
                     variant="danger"
                     loading={takeDownMutation.isPending}
+                    disabled={!selectedReport.listingId && !selectedReport.rentalId}
                     onClick={() => {
-                      if (!selectedReport.listingId) {
+                      if (!selectedReport.listingId && !selectedReport.rentalId) {
                         return;
                       }
-                      takeDownMutation.mutate({ listingId: selectedReport.listingId, reason });
+                      takeDownMutation.mutate({ reportId: selectedReport.id, reason });
                     }}
                   >
                     Remover conteudo

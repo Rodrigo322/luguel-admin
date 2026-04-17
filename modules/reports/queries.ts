@@ -1,8 +1,13 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { listCriticalReports, listReports, reviewReport, type ReportListFilters } from "@/services/reports-service";
-import { archiveListingByAdmin } from "@/services/listings-service";
+import {
+  listCriticalReports,
+  listReports,
+  reviewReport,
+  takeDownReport,
+  type ReportListFilters
+} from "@/services/reports-service";
 import { banUser } from "@/services/users-service";
 
 export function useReports(filters: ReportListFilters) {
@@ -38,15 +43,15 @@ export function useReviewReport() {
   });
 }
 
-export function useTakeDownListing() {
+export function useTakeDownContent() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ listingId, reason }: { listingId: string; reason: string }) =>
-      archiveListingByAdmin(listingId, reason),
+    mutationFn: ({ reportId, reason }: { reportId: string; reason: string }) => takeDownReport(reportId, reason),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reports"] });
       queryClient.invalidateQueries({ queryKey: ["listings"] });
+      queryClient.invalidateQueries({ queryKey: ["rentals"] });
     }
   });
 }

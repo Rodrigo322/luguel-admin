@@ -36,3 +36,8 @@ export async function reviewReport(reportId: string, status: Exclude<ReportStatu
   const response = await api.patch<ReportRecord>(`/admin/reports/${reportId}/status`, { status, reason });
   return response.data;
 }
+
+export async function takeDownReport(reportId: string, reason: string): Promise<ReportRecord> {
+  const response = await api.post<ReportRecord>(`/admin/reports/${reportId}/takedown`, { reason });
+  return response.data;
+}
