@@ -1,20 +1,52 @@
 "use client";
 
+import { useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
 import { LoadingState } from "@/components/ui/loading-state";
-import { useListings, useSuspendListing } from "@/modules/listings/queries";
-import { useCriticalReports, useReviewReport } from "@/modules/reports/queries";
+import { useApproveListing, useListings, useSuspendListing } from "@/modules/listings/queries";
+import { useCriticalReports, usePunishUser, useReviewReport, useTakeDownContent } from "@/modules/reports/queries";
+import { useUsers } from "@/modules/users/queries";
 import { toErrorMessage } from "@/lib/http-errors";
 
 export function ModerationContent() {
   const pendingListingsQuery = useListings("PENDING_VALIDATION");
   const criticalReportsQuery = useCriticalReports();
+  const usersQuery = useUsers();
+  const approveMutation = useApproveListing();
   const suspendMutation = useSuspendListing();
   const reviewMutation = useReviewReport();
+  const takeDownMutation = useTakeDownContent();
+  const punishMutation = usePunishUser();
+  const pendingListings = pendingListingsQuery.data ?? [];
+  const criticalReports = criticalReportsQuery.data ?? [];
+
+  const usersById = useMemo(() => {
+    return new Map((usersQuery.data ?? []).map((user) => [user.id, user]));
+  }, [usersQuery.data]);
+
+  const suspiciousUsers = useMemo(() => {
+    const reportCountByUser = new Map<string, number>();
+
+    for (const report of criticalReportsQuery.data ?? []) {
+      if (!report.subjectUserId) {
+        continue;
+      }
+
+      reportCountByUser.set(report.subjectUserId, (reportCountByUser.get(report.subjectUserId) ?? 0) + 1);
+    }
+
+    return Array.from(reportCountByUser.entries())
+      .map(([userId, reportCount]) => ({
+        userId,
+        reportCount,
+        user: usersById.get(userId)
+      }))
+      .sort((left, right) => right.reportCount - left.reportCount);
+  }, [criticalReportsQuery.data, usersById]);
 
   if (pendingListingsQuery.isLoading || criticalReportsQuery.isLoading) {
     return <LoadingState label="Montando fila de moderacao..." />;
@@ -23,9 +55,6 @@ export function ModerationContent() {
   if (pendingListingsQuery.isError || criticalReportsQuery.isError) {
     return <ErrorState message="Nao foi possivel carregar fila de moderacao." />;
   }
-
-  const pendingListings = pendingListingsQuery.data ?? [];
-  const criticalReports = criticalReportsQuery.data ?? [];
 
   if (pendingListings.length === 0 && criticalReports.length === 0) {
     return (
@@ -48,7 +77,15 @@ export function ModerationContent() {
             <div key={listing.id} className="rounded-xl border border-danger/35 bg-danger-muted/40 p-4">
               <p className="font-semibold">{listing.title}</p>
               <p className="line-clamp-2 text-sm text-shell-foreground-dim">{listing.description}</p>
+              <p className="mt-2 text-xs text-shell-foreground-dim">Risk: {listing.riskLevel}</p>
               <div className="mt-3 flex gap-2">
+                <Button
+                  variant="primary"
+                  loading={approveMutation.isPending}
+                  onClick={() => approveMutation.mutate(listing.id)}
+                >
+                  Aprovar anuncio
+                </Button>
                 <Button
                   variant="secondary"
                   onClick={() => {
@@ -85,20 +122,50 @@ export function ModerationContent() {
             <div key={report.id} className="rounded-xl border border-border-subtle bg-shell-muted/55 p-4">
               <p className="font-semibold">{report.reason}</p>
               <p className="text-sm text-shell-foreground-dim">{report.details ?? "Sem detalhes adicionais."}</p>
+              <p className="mt-2 text-xs text-shell-foreground-dim">
+                Alvo: {report.subjectUserId ?? "nao identificado"} | Risco: {report.riskLevel}
+              </p>
               <div className="mt-3 flex gap-2">
                 <Button
                   variant="secondary"
+                  loading={reviewMutation.isPending}
                   onClick={() => reviewMutation.mutate({ reportId: report.id, status: "TRIAGED", reason: "Ignorado" })}
                 >
                   Aprovar
                 </Button>
                 <Button
                   variant="danger"
-                  onClick={() =>
-                    reviewMutation.mutate({ reportId: report.id, status: "REJECTED", reason: "Conteudo reprovado" })
-                  }
+                  loading={takeDownMutation.isPending}
+                  disabled={!report.listingId && !report.rentalId}
+                  onClick={() => {
+                    if (!report.listingId && !report.rentalId) {
+                      return;
+                    }
+
+                    takeDownMutation.mutate({
+                      reportId: report.id,
+                      reason: "Conteudo bloqueado pela moderacao."
+                    });
+                  }}
                 >
                   Bloquear
+                </Button>
+                <Button
+                  variant="danger"
+                  loading={punishMutation.isPending}
+                  disabled={!report.subjectUserId}
+                  onClick={() => {
+                    if (!report.subjectUserId) {
+                      return;
+                    }
+
+                    punishMutation.mutate({
+                      userId: report.subjectUserId,
+                      reason: "Usuario banido por risco critico recorrente."
+                    });
+                  }}
+                >
+                  Banir
                 </Button>
               </div>
             </div>
@@ -106,8 +173,54 @@ export function ModerationContent() {
         </div>
       </Card>
 
-      {(suspendMutation.isError || reviewMutation.isError) && (
-        <ErrorState message={toErrorMessage(suspendMutation.error ?? reviewMutation.error)} />
+      <Card>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-2xl font-semibold">Suspicious Users</h2>
+          <Badge label={`${suspiciousUsers.length} monitorados`} tone="warning" />
+        </div>
+        {suspiciousUsers.length === 0 ? (
+          <p className="text-sm text-shell-foreground-dim">Nenhum usuario suspeito identificado em denuncias criticas.</p>
+        ) : (
+          <div className="space-y-3">
+            {suspiciousUsers.map((entry) => (
+              <div key={entry.userId} className="rounded-xl border border-border-subtle bg-shell-muted/55 p-4">
+                <p className="font-semibold">{entry.user?.name ?? entry.userId}</p>
+                <p className="text-sm text-shell-foreground-dim">{entry.user?.email ?? "Email nao disponivel"}</p>
+                <p className="mt-2 text-xs text-shell-foreground-dim">{entry.reportCount} denuncia(s) critica(s)</p>
+                <div className="mt-3">
+                  <Button
+                    variant="danger"
+                    loading={punishMutation.isPending}
+                    onClick={() =>
+                      punishMutation.mutate({
+                        userId: entry.userId,
+                        reason: "Usuario banido por padrao de risco critico."
+                      })
+                    }
+                  >
+                    Banir usuario
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+
+      {(approveMutation.isError ||
+        suspendMutation.isError ||
+        reviewMutation.isError ||
+        takeDownMutation.isError ||
+        punishMutation.isError) && (
+        <ErrorState
+          message={toErrorMessage(
+            approveMutation.error ??
+              suspendMutation.error ??
+              reviewMutation.error ??
+              takeDownMutation.error ??
+              punishMutation.error
+          )}
+        />
       )}
     </div>
   );
