@@ -43,6 +43,15 @@ function toneByStatus(status: BoostStatusFilter): "default" | "success" | "warni
   return "default";
 }
 
+function labelByBoostStatus(status: BoostStatusFilter): string {
+  if (status === "ACTIVE") return "Ativo";
+  if (status === "PENDING") return "Pendente";
+  if (status === "PAID") return "Pago";
+  if (status === "EXPIRED") return "Expirado";
+  if (status === "CANCELED") return "Cancelado";
+  return "Todos";
+}
+
 export function BoostContent() {
   const [statusFilter, setStatusFilter] = useState<BoostStatusFilter>("ALL");
   const [sortMode, setSortMode] = useState<SortMode>("EFFICIENCY");
@@ -94,7 +103,7 @@ export function BoostContent() {
 
       return {
         ...boost,
-        listingTitle: listing?.title ?? `Listing ${boost.listingId.slice(0, 8)}`,
+        listingTitle: listing?.title ?? `Anuncio ${boost.listingId.slice(0, 8)}`,
         listingRisk: listing?.riskLevel,
         durationDays,
         remainingDays,
@@ -111,18 +120,9 @@ export function BoostContent() {
         : enrichedBoosts.filter((boost) => boost.status === statusFilter);
 
     return [...base].sort((left, right) => {
-      if (sortMode === "AMOUNT_DESC") {
-        return right.amount - left.amount;
-      }
-
-      if (sortMode === "NEWEST") {
-        return new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime();
-      }
-
-      if (sortMode === "ENDS_SOON") {
-        return left.remainingDays - right.remainingDays;
-      }
-
+      if (sortMode === "AMOUNT_DESC") return right.amount - left.amount;
+      if (sortMode === "NEWEST") return new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime();
+      if (sortMode === "ENDS_SOON") return left.remainingDays - right.remainingDays;
       return right.dailyBudget - left.dailyBudget;
     });
   }, [enrichedBoosts, sortMode, statusFilter]);
@@ -153,9 +153,7 @@ export function BoostContent() {
   }, [enrichedBoosts]);
 
   const topCampaign = useMemo(
-    () =>
-      [...enrichedBoosts].sort((left, right) => right.amount - left.amount)[0] ??
-      null,
+    () => [...enrichedBoosts].sort((left, right) => right.amount - left.amount)[0] ?? null,
     [enrichedBoosts]
   );
 
@@ -188,31 +186,27 @@ export function BoostContent() {
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-shell-foreground-dim">Investimento total</p>
           <p className="mt-2 text-4xl font-bold">{formatCompactNumber(summary.totalAmount)}</p>
           <p className="mt-2 text-sm text-shell-foreground-dim">
-            {summary.boostedListings} anúncios impulsionados até agora.
+            {summary.boostedListings} anuncios impulsionados ate agora.
           </p>
         </Card>
         <Card>
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-shell-foreground-dim">Campanhas ativas</p>
           <p className="mt-2 text-4xl font-bold text-success">{summary.activeCount}</p>
           <p className="mt-2 text-sm text-shell-foreground-dim">
-            {dashboardQuery.data?.activeBoosts ?? summary.activeCount} ativo(s) reportado(s) pela API de métricas.
+            {dashboardQuery.data?.activeBoosts ?? summary.activeCount} ativo(s) reportado(s) pela API de metricas.
           </p>
         </Card>
         <Card>
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-shell-foreground-dim">Renovação urgente</p>
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-shell-foreground-dim">Renovacao urgente</p>
           <p className="mt-2 text-4xl font-bold text-warning">{summary.endingSoonCount}</p>
-          <p className="mt-2 text-sm text-shell-foreground-dim">
-            Campanhas ativas que encerram em até 3 dias.
-          </p>
+          <p className="mt-2 text-sm text-shell-foreground-dim">Campanhas ativas que encerram em ate 3 dias.</p>
         </Card>
         <Card>
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-shell-foreground-dim">Orçamento mensal projetado</p>
-          <p className="mt-2 text-4xl font-bold text-accent">
-            {formatCompactNumber(summary.projectedMonthlyBudget)}
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-shell-foreground-dim">
+            Orcamento mensal projetado
           </p>
-          <p className="mt-2 text-sm text-shell-foreground-dim">
-            Baseado no custo diário atual das campanhas ativas.
-          </p>
+          <p className="mt-2 text-4xl font-bold text-accent">{formatCompactNumber(summary.projectedMonthlyBudget)}</p>
+          <p className="mt-2 text-sm text-shell-foreground-dim">Baseado no custo diario atual das campanhas ativas.</p>
         </Card>
       </section>
 
@@ -220,44 +214,39 @@ export function BoostContent() {
         <Card>
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="text-2xl font-semibold">Current Inventory Promotions</h2>
-              <p className="text-sm text-shell-foreground-dim">
-                Monitoramento em tempo real de boosts criados no backend.
-              </p>
+              <h2 className="text-2xl font-semibold">Campanhas de Inventario</h2>
+              <p className="text-sm text-shell-foreground-dim">Monitoramento em tempo real de boosts criados no backend.</p>
             </div>
             <Button className="gap-2" onClick={() => setIsCreateModalOpen(true)}>
               <Plus className="h-4 w-4" />
-              Create New Boost
+              Criar Impulsionamento
             </Button>
           </div>
 
           <div className="mb-3 grid gap-2 md:grid-cols-2">
             <Select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as BoostStatusFilter)}>
-              <option value="ALL">Status: All</option>
-              <option value="ACTIVE">Active</option>
-              <option value="PENDING">Pending</option>
-              <option value="PAID">Paid</option>
-              <option value="EXPIRED">Expired</option>
-              <option value="CANCELED">Canceled</option>
+              <option value="ALL">Status: Todos</option>
+              <option value="ACTIVE">Ativo</option>
+              <option value="PENDING">Pendente</option>
+              <option value="PAID">Pago</option>
+              <option value="EXPIRED">Expirado</option>
+              <option value="CANCELED">Cancelado</option>
             </Select>
             <Select value={sortMode} onChange={(event) => setSortMode(event.target.value as SortMode)}>
-              <option value="EFFICIENCY">Sort: Efficiency</option>
-              <option value="AMOUNT_DESC">Sort: Highest amount</option>
-              <option value="ENDS_SOON">Sort: Ending soon</option>
-              <option value="NEWEST">Sort: Newest</option>
+              <option value="EFFICIENCY">Ordenar: Eficiencia</option>
+              <option value="AMOUNT_DESC">Ordenar: Maior investimento</option>
+              <option value="ENDS_SOON">Ordenar: Encerra primeiro</option>
+              <option value="NEWEST">Ordenar: Mais recente</option>
             </Select>
           </div>
 
           {visibleBoosts.length === 0 ? (
             <EmptyState
               title="Sem campanhas para este filtro"
-              description="Ajuste os filtros ou crie um novo impulsionamento para começar."
+              description="Ajuste os filtros ou crie um novo impulsionamento para comecar."
             />
           ) : (
-            <DataTable
-              columns={["Asset", "Status", "Investimento", "Período", "Eficiência", "Risco"]}
-              className="overflow-x-auto"
-            >
+            <DataTable columns={["Anuncio", "Status", "Investimento", "Periodo", "Eficiencia", "Risco"]} className="overflow-x-auto">
               {visibleBoosts.map((boost) => (
                 <tr key={boost.id} className="border-t border-border-subtle bg-shell-elevated/45">
                   <td className="px-4 py-3 align-top">
@@ -265,8 +254,8 @@ export function BoostContent() {
                     <p className="font-mono text-xs text-shell-foreground-dim">{boost.listingId}</p>
                   </td>
                   <td className="px-4 py-3 align-top">
-                    <Badge label={boost.status} tone={toneByStatus(boost.status)} />
-                    {boost.isEndingSoon && <Badge label="ENDING SOON" tone="warning" className="ml-2" />}
+                    <Badge label={labelByBoostStatus(boost.status)} tone={toneByStatus(boost.status)} />
+                    {boost.isEndingSoon && <Badge label="ENCERRA EM BREVE" tone="warning" className="ml-2" />}
                   </td>
                   <td className="px-4 py-3 align-top">
                     <p className="font-semibold">{formatCurrency(boost.amount)}</p>
@@ -274,14 +263,14 @@ export function BoostContent() {
                   </td>
                   <td className="px-4 py-3 align-top">
                     <p className="text-sm">{formatDateTime(boost.startsAt)}</p>
-                    <p className="text-sm text-shell-foreground-dim">até {formatDateTime(boost.endsAt)}</p>
+                    <p className="text-sm text-shell-foreground-dim">ate {formatDateTime(boost.endsAt)}</p>
                     <p className="mt-1 text-xs text-shell-foreground-dim">
                       {boost.remainingDays >= 0 ? `${boost.remainingDays} dia(s) restante(s)` : "Encerrado"}
                     </p>
                   </td>
                   <td className="px-4 py-3 align-top">
                     <p className="font-semibold">{boost.durationDays} dias</p>
-                    <p className="text-xs text-shell-foreground-dim">Ciclo médio: {summary.averageDuration.toFixed(1)} dias</p>
+                    <p className="text-xs text-shell-foreground-dim">Ciclo medio: {summary.averageDuration.toFixed(1)} dias</p>
                   </td>
                   <td className="px-4 py-3 align-top">
                     {boost.listingRisk ? (
@@ -290,7 +279,7 @@ export function BoostContent() {
                         tone={boost.listingRisk === "HIGH" || boost.listingRisk === "CRITICAL" ? "danger" : "default"}
                       />
                     ) : (
-                      <span className="text-xs text-shell-foreground-dim">Sem sinalização</span>
+                      <span className="text-xs text-shell-foreground-dim">Sem sinalizacao</span>
                     )}
                   </td>
                 </tr>
@@ -303,74 +292,63 @@ export function BoostContent() {
           <Card>
             <div className="mb-2 flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-success" />
-              <h3 className="text-xl font-semibold">Performance Snapshot</h3>
+              <h3 className="text-xl font-semibold">Resumo de Performance</h3>
             </div>
             <p className="text-sm text-shell-foreground-dim">
-              Cobertura atual de campanhas: {coverageRate.toFixed(1)}% dos anúncios cadastrados.
+              Cobertura atual de campanhas: {coverageRate.toFixed(1)}% dos anuncios cadastrados.
             </p>
             <div className="mt-3 h-2 rounded-full bg-shell-muted">
-              <div
-                className="h-2 rounded-full bg-accent transition-all"
-                style={{ width: `${Math.max(4, Math.min(coverageRate, 100))}%` }}
-              />
+              <div className="h-2 rounded-full bg-accent transition-all" style={{ width: `${Math.max(4, Math.min(coverageRate, 100))}%` }} />
             </div>
             <p className="mt-2 text-xs text-shell-foreground-dim">
-              {summary.boostedListings} de {listingsTotal} anúncios com impulsionamento.
+              {summary.boostedListings} de {listingsTotal} anuncios com impulsionamento.
             </p>
           </Card>
 
           <Card>
             <div className="mb-2 flex items-center gap-2">
               <Rocket className="h-4 w-4 text-accent" />
-              <h3 className="text-xl font-semibold">Top Campaign</h3>
+              <h3 className="text-xl font-semibold">Campanha de Maior Investimento</h3>
             </div>
             {topCampaign ? (
               <div className="space-y-1">
                 <p className="font-semibold">{topCampaign.listingTitle}</p>
                 <p className="text-sm text-shell-foreground-dim">{formatCurrency(topCampaign.amount)} investido</p>
                 <p className="text-sm text-shell-foreground-dim">
-                  Status atual: <span className="font-semibold text-shell-foreground">{topCampaign.status}</span>
+                  Status atual: <span className="font-semibold text-shell-foreground">{labelByBoostStatus(topCampaign.status)}</span>
                 </p>
               </div>
             ) : (
-              <p className="text-sm text-shell-foreground-dim">Nenhuma campanha criada até o momento.</p>
+              <p className="text-sm text-shell-foreground-dim">Nenhuma campanha criada ate o momento.</p>
             )}
           </Card>
 
           <Card>
             <div className="mb-2 flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-warning" />
-              <h3 className="text-xl font-semibold">Renewal Pressure</h3>
+              <h3 className="text-xl font-semibold">Pressao de Renovacao</h3>
             </div>
             <p className="text-sm text-shell-foreground-dim">
-              {summary.endingSoonCount} campanha(s) próxima(s) do encerramento e {summary.expiredCount} expirada(s).
+              {summary.endingSoonCount} campanha(s) proxima(s) do encerramento e {summary.expiredCount} expirada(s).
             </p>
           </Card>
 
           <Card>
             <div className="mb-2 flex items-center gap-2">
               <BarChart3 className="h-4 w-4 text-shell-foreground-dim" />
-              <h3 className="text-xl font-semibold">Commission Impact</h3>
+              <h3 className="text-xl font-semibold">Impacto em Comissoes</h3>
             </div>
-            <p className="text-sm text-shell-foreground-dim">
-              Receita de comissão no backend:
-            </p>
-            <p className="mt-1 text-2xl font-bold text-accent">
-              {formatCurrency(dashboardQuery.data?.totalCommissionRevenue ?? 0)}
-            </p>
+            <p className="text-sm text-shell-foreground-dim">Receita de comissao no backend:</p>
+            <p className="mt-1 text-2xl font-bold text-accent">{formatCurrency(dashboardQuery.data?.totalCommissionRevenue ?? 0)}</p>
           </Card>
         </div>
       </section>
 
-      <Modal title="Create New Boost" open={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)}>
+      <Modal title="Criar Impulsionamento" open={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)}>
         <form className="space-y-3" onSubmit={onSubmit}>
           <div>
-            <label className="mb-1 block text-sm text-shell-foreground-dim">Anúncio</label>
-            <Input
-              placeholder="ID do anúncio"
-              list="listing-options"
-              {...form.register("listingId")}
-            />
+            <label className="mb-1 block text-sm text-shell-foreground-dim">Anuncio</label>
+            <Input placeholder="ID do anuncio" list="listing-options" {...form.register("listingId")} />
             <datalist id="listing-options">
               {activeListings.map((listing) => (
                 <option key={listing.id} value={listing.id}>
@@ -378,32 +356,22 @@ export function BoostContent() {
                 </option>
               ))}
             </datalist>
-            {form.formState.errors.listingId && (
-              <p className="mt-1 text-xs text-danger">{form.formState.errors.listingId.message}</p>
-            )}
+            {form.formState.errors.listingId && <p className="mt-1 text-xs text-danger">{form.formState.errors.listingId.message}</p>}
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm text-shell-foreground-dim">Investimento (R$)</label>
               <Input type="number" step="0.01" {...form.register("amount", { valueAsNumber: true })} />
-              {form.formState.errors.amount && (
-                <p className="mt-1 text-xs text-danger">{form.formState.errors.amount.message}</p>
-              )}
+              {form.formState.errors.amount && <p className="mt-1 text-xs text-danger">{form.formState.errors.amount.message}</p>}
             </div>
             <div>
-              <label className="mb-1 block text-sm text-shell-foreground-dim">Dias de duração</label>
+              <label className="mb-1 block text-sm text-shell-foreground-dim">Dias de duracao</label>
               <Input type="number" {...form.register("days", { valueAsNumber: true })} />
-              {form.formState.errors.days && (
-                <p className="mt-1 text-xs text-danger">{form.formState.errors.days.message}</p>
-              )}
+              {form.formState.errors.days && <p className="mt-1 text-xs text-danger">{form.formState.errors.days.message}</p>}
             </div>
           </div>
           <label className="flex items-center gap-2 text-sm text-shell-foreground-dim">
-            <input
-              type="checkbox"
-              {...form.register("paymentConfirmed")}
-              className="h-4 w-4 rounded border-border-subtle"
-            />
+            <input type="checkbox" {...form.register("paymentConfirmed")} className="h-4 w-4 rounded border-border-subtle" />
             Pagamento confirmado
           </label>
           <div className="flex justify-end">

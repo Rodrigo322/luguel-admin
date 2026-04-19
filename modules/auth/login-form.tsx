@@ -51,8 +51,8 @@ export function LoginForm({ redirectPath }: LoginFormProps) {
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md p-6">
-        <p className="font-mono text-xs uppercase tracking-[0.25em] text-shell-foreground-dim">Luguel Control</p>
-        <h1 className="mt-2 text-3xl font-bold">Admin Access</h1>
+        <p className="font-mono text-xs uppercase tracking-[0.25em] text-shell-foreground-dim">Luguel Admin</p>
+        <h1 className="mt-2 text-3xl font-bold">Acesso Administrativo</h1>
         <p className="mt-2 text-sm text-shell-foreground-dim">
           Entre com conta administrativa para acessar moderacao e controle da plataforma.
         </p>

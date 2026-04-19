@@ -8,11 +8,13 @@ interface AdminShellProps {
 
 export function AdminShell({ children }: AdminShellProps) {
   return (
-    <div className="flex min-h-screen">
+    <div className="admin-shell-bg min-h-screen">
       <Sidebar />
-      <div className="flex-1 px-4 py-4 lg:px-8">
-        <Header />
-        <main>{children}</main>
+      <div className="admin-shell-bg min-h-screen lg:pl-72">
+        <div className="w-full px-4 py-4 lg:px-8">
+          <Header />
+          <main className="pb-8">{children}</main>
+        </div>
       </div>
     </div>
   );

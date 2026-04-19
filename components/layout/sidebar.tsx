@@ -33,14 +33,14 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden w-72 shrink-0 flex-col border-r border-border-subtle bg-shell-elevated/85 p-5 lg:flex">
+    <aside className="admin-shell-bg hidden fixed inset-y-0 left-0 z-40 w-72 flex-col border-r border-border-subtle p-5 lg:flex">
       <div className="mb-8 rounded-2xl border border-border-subtle bg-shell-muted/70 p-4">
         <p className="text-2xl font-bold text-shell-foreground">{APP_NAME}</p>
         <p className="font-mono text-xs uppercase tracking-[0.22em] text-shell-foreground-dim">
-          Admin Intelligence
+          Painel Administrativo
         </p>
       </div>
-      <nav className="scroll-thin flex-1 space-y-1 overflow-y-auto pr-1">
+      <nav className="flex-1 space-y-1 pr-1">
         {NAV_ITEMS.map((item) => {
           const Icon = ICONS[item.href];
           const active = pathname === item.href;

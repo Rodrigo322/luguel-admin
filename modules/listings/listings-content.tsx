@@ -37,6 +37,33 @@ function listingBadgeTone(status: ListingStatus): "default" | "success" | "warni
   return "accent";
 }
 
+function listingStatusLabel(status: ListingStatus): string {
+  if (status === "ACTIVE") {
+    return "Ativo";
+  }
+
+  if (status === "PENDING_VALIDATION") {
+    return "Pendente";
+  }
+
+  if (status === "SUSPENDED") {
+    return "Bloqueado";
+  }
+
+  if (status === "ARCHIVED") {
+    return "Removido";
+  }
+
+  return "Sinalizado";
+}
+
+function riskLevelLabel(risk: ListingRecord["riskLevel"]): string {
+  if (risk === "LOW") return "Baixo";
+  if (risk === "MEDIUM") return "Medio";
+  if (risk === "HIGH") return "Alto";
+  return "Critico";
+}
+
 export function ListingsContent() {
   const [statusFilter, setStatusFilter] = useState<ListingStatus | "ALL">("ALL");
   const [selectedListing, setSelectedListing] = useState<ListingRecord | null>(null);
@@ -80,9 +107,9 @@ export function ListingsContent() {
           {listings.map((listing) => (
             <Card key={listing.id} className="space-y-3">
               <div className="flex items-center justify-between">
-                <Badge label={listing.status} tone={listingBadgeTone(listing.status)} />
+                <Badge label={listingStatusLabel(listing.status)} tone={listingBadgeTone(listing.status)} />
                 <Badge
-                  label={`RISK ${listing.riskLevel}`}
+                  label={`RISCO ${riskLevelLabel(listing.riskLevel)}`}
                   tone={listing.riskLevel === "CRITICAL" || listing.riskLevel === "HIGH" ? "danger" : "default"}
                 />
               </div>

@@ -8,14 +8,14 @@ import { useTheme } from "@/hooks/use-theme";
 import { cn } from "@/lib/utils";
 
 const COLOR_TOKENS = [
-  { label: "Shell", variable: "--shell" },
-  { label: "Elevated", variable: "--shell-elevated" },
-  { label: "Muted", variable: "--shell-muted" },
-  { label: "Accent", variable: "--accent" },
-  { label: "Accent Strong", variable: "--accent-strong" },
-  { label: "Success", variable: "--success" },
-  { label: "Warning", variable: "--warning" },
-  { label: "Danger", variable: "--danger" }
+  { label: "Base", variable: "--shell" },
+  { label: "Elevado", variable: "--shell-elevated" },
+  { label: "Suave", variable: "--shell-muted" },
+  { label: "Destaque", variable: "--accent" },
+  { label: "Destaque Forte", variable: "--accent-strong" },
+  { label: "Sucesso", variable: "--success" },
+  { label: "Aviso", variable: "--warning" },
+  { label: "Perigo", variable: "--danger" }
 ] as const;
 
 export function SettingsContent() {
@@ -28,10 +28,10 @@ export function SettingsContent() {
           <div>
             <div className="mb-1 flex items-center gap-2">
               <Palette className="h-5 w-5 text-accent" />
-              <h2 className="text-2xl font-semibold">Appearance & Theme</h2>
+              <h2 className="text-2xl font-semibold">Aparencia e Tema</h2>
             </div>
             <p className="text-sm text-shell-foreground-dim">
-              Controle global de tema do painel administrativo com persistência local.
+              Controle global de tema do painel administrativo com persistencia local.
             </p>
           </div>
           <Badge label={theme === "dark" ? "Modo Escuro" : "Modo Claro"} tone="accent" />
@@ -63,14 +63,11 @@ export function SettingsContent() {
       <Card>
         <h3 className="text-xl font-semibold">Paleta Global</h3>
         <p className="mb-4 mt-1 text-sm text-shell-foreground-dim">
-          Tokens globais usados em todo o dashboard para manter consistência entre modo claro e escuro.
+          Tokens globais usados no dashboard para manter consistencia entre modo claro e escuro.
         </p>
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {COLOR_TOKENS.map((token) => (
-            <div
-              key={token.variable}
-              className="rounded-xl border border-border-subtle bg-shell-muted/55 p-3"
-            >
+            <div key={token.variable} className="rounded-xl border border-border-subtle bg-shell-muted/55 p-3">
               <div
                 className={cn("mb-2 h-10 w-full rounded-md border border-border-subtle")}
                 style={{ backgroundColor: `var(${token.variable})` }}

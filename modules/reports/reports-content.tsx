@@ -21,6 +21,20 @@ import { toErrorMessage } from "@/lib/http-errors";
 
 const PAGE_SIZE = 10;
 
+function reportStatusLabel(status: ReportStatus): string {
+  if (status === "OPEN") return "Aberta";
+  if (status === "TRIAGED") return "Triada";
+  if (status === "RESOLVED") return "Resolvida";
+  return "Rejeitada";
+}
+
+function riskLevelLabel(riskLevel: RiskLevel): string {
+  if (riskLevel === "LOW") return "Baixo";
+  if (riskLevel === "MEDIUM") return "Medio";
+  if (riskLevel === "HIGH") return "Alto";
+  return "Critico";
+}
+
 export function ReportsContent() {
   const [search, setSearch] = useState("");
   const [riskFilter, setRiskFilter] = useState<RiskLevel | "ALL">("ALL");
@@ -69,10 +83,10 @@ export function ReportsContent() {
           }}
         >
           <option value="ALL">Todos status</option>
-          <option value="OPEN">OPEN</option>
-          <option value="TRIAGED">TRIAGED</option>
-          <option value="RESOLVED">RESOLVED</option>
-          <option value="REJECTED">REJECTED</option>
+          <option value="OPEN">Aberta</option>
+          <option value="TRIAGED">Triada</option>
+          <option value="RESOLVED">Resolvida</option>
+          <option value="REJECTED">Rejeitada</option>
         </Select>
         <Select
           value={riskFilter}
@@ -82,10 +96,10 @@ export function ReportsContent() {
           }}
         >
           <option value="ALL">Todos riscos</option>
-          <option value="LOW">LOW</option>
-          <option value="MEDIUM">MEDIUM</option>
-          <option value="HIGH">HIGH</option>
-          <option value="CRITICAL">CRITICAL</option>
+          <option value="LOW">Baixo</option>
+          <option value="MEDIUM">Medio</option>
+          <option value="HIGH">Alto</option>
+          <option value="CRITICAL">Critico</option>
         </Select>
         <div className="flex items-center justify-end gap-2 text-sm text-shell-foreground-dim">
           <span>{pagination ? `${pagination.total} casos` : "0 casos"}</span>
@@ -100,7 +114,7 @@ export function ReportsContent() {
             {reports.map((report) => (
               <Card key={report.id} className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Badge label={report.riskLevel} tone={report.riskLevel === "CRITICAL" ? "danger" : "warning"} />
+                  <Badge label={riskLevelLabel(report.riskLevel)} tone={report.riskLevel === "CRITICAL" ? "danger" : "warning"} />
                   <span className="text-xs text-shell-foreground-dim">{formatDateTime(report.createdAt)}</span>
                 </div>
                 <h3 className="text-lg font-semibold">{report.reason}</h3>
@@ -138,9 +152,10 @@ export function ReportsContent() {
             {selectedReport && (
               <div className="space-y-4">
                 <header>
-                  <p className="font-mono text-xs uppercase tracking-[0.2em] text-danger">Urgent case</p>
+                  <p className="font-mono text-xs uppercase tracking-[0.2em] text-danger">Caso urgente</p>
                   <h2 className="mt-1 text-3xl font-semibold">{selectedReport.reason}</h2>
                 </header>
+                <p className="text-xs text-shell-foreground-dim">Status: {reportStatusLabel(selectedReport.status)}</p>
                 <p className="text-shell-foreground-dim">{selectedReport.details ?? "Sem descricao adicional no reporte."}</p>
                 <Input value={reason} onChange={(event) => setReason(event.target.value)} />
                 <div className="grid gap-2 sm:grid-cols-2">

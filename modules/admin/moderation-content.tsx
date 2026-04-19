@@ -12,6 +12,13 @@ import { useCriticalReports, usePunishUser, useReviewReport, useTakeDownContent 
 import { useUsers } from "@/modules/users/queries";
 import { toErrorMessage } from "@/lib/http-errors";
 
+function riskLabel(risk: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"): string {
+  if (risk === "LOW") return "Baixo";
+  if (risk === "MEDIUM") return "Medio";
+  if (risk === "HIGH") return "Alto";
+  return "Critico";
+}
+
 export function ModerationContent() {
   const pendingListingsQuery = useListings("PENDING_VALIDATION");
   const criticalReportsQuery = useCriticalReports();
@@ -69,7 +76,7 @@ export function ModerationContent() {
     <div className="space-y-6">
       <Card>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">Suspicious Listings</h2>
+          <h2 className="text-2xl font-semibold">Anuncios Suspeitos</h2>
           <Badge label={`${pendingListings.length} pendentes`} tone="warning" />
         </div>
         <div className="grid gap-3 md:grid-cols-2">
@@ -77,7 +84,7 @@ export function ModerationContent() {
             <div key={listing.id} className="rounded-xl border border-danger/35 bg-danger-muted/40 p-4">
               <p className="font-semibold">{listing.title}</p>
               <p className="line-clamp-2 text-sm text-shell-foreground-dim">{listing.description}</p>
-              <p className="mt-2 text-xs text-shell-foreground-dim">Risk: {listing.riskLevel}</p>
+              <p className="mt-2 text-xs text-shell-foreground-dim">Risco: {riskLabel(listing.riskLevel)}</p>
               <div className="mt-3 flex gap-2">
                 <Button
                   variant="primary"
@@ -114,7 +121,7 @@ export function ModerationContent() {
 
       <Card>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">Critical Reports</h2>
+          <h2 className="text-2xl font-semibold">Denuncias Criticas</h2>
           <Badge label={`${criticalReports.length} criticas`} tone="danger" />
         </div>
         <div className="space-y-3">
@@ -123,7 +130,7 @@ export function ModerationContent() {
               <p className="font-semibold">{report.reason}</p>
               <p className="text-sm text-shell-foreground-dim">{report.details ?? "Sem detalhes adicionais."}</p>
               <p className="mt-2 text-xs text-shell-foreground-dim">
-                Alvo: {report.subjectUserId ?? "nao identificado"} | Risco: {report.riskLevel}
+                Alvo: {report.subjectUserId ?? "nao identificado"} | Risco: {riskLabel(report.riskLevel)}
               </p>
               <div className="mt-3 flex gap-2">
                 <Button
@@ -175,7 +182,7 @@ export function ModerationContent() {
 
       <Card>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">Suspicious Users</h2>
+          <h2 className="text-2xl font-semibold">Usuarios Suspeitos</h2>
           <Badge label={`${suspiciousUsers.length} monitorados`} tone="warning" />
         </div>
         {suspiciousUsers.length === 0 ? (

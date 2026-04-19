@@ -24,25 +24,25 @@ export function DashboardContent() {
   const summary = [
     {
       icon: Users,
-      label: "Total users",
+      label: "Total de usuarios",
       value: formatCompactNumber(metrics.totalUsers),
       tone: "text-shell-foreground"
     },
     {
       icon: KeyRound,
-      label: "Total ads",
+      label: "Total de anuncios",
       value: formatCompactNumber(metrics.totalListings),
       tone: "text-shell-foreground"
     },
     {
       icon: Wallet,
-      label: "Total rentals",
+      label: "Total de locacoes",
       value: formatCompactNumber(metrics.totalRentals),
       tone: "text-shell-foreground"
     },
     {
       icon: AlertTriangle,
-      label: "Active reports",
+      label: "Denuncias ativas",
       value: formatCompactNumber(metrics.totalReports),
       tone: "text-danger"
     }
@@ -64,7 +64,7 @@ export function DashboardContent() {
 
       <Card>
         <div className="mb-4">
-          <h2 className="text-2xl font-semibold">Platform Growth</h2>
+          <h2 className="text-2xl font-semibold">Crescimento da Plataforma</h2>
           <p className="text-sm text-shell-foreground-dim">Metrica agregada por volume atual de usuarios e locacoes.</p>
         </div>
         <GrowthChart usersCount={metrics.totalUsers} rentalsCount={metrics.totalRentals} />
@@ -72,13 +72,13 @@ export function DashboardContent() {
 
       <section className="grid gap-4 xl:grid-cols-2">
         <Card>
-          <h3 className="text-xl font-semibold">Moderation Stack</h3>
+          <h3 className="text-xl font-semibold">Pilha de Moderacao</h3>
           <p className="mt-2 text-sm text-shell-foreground-dim">
             {metrics.pendingListings} anuncios pendentes de validacao e {metrics.highRiskListings} itens em risco elevado.
           </p>
         </Card>
         <Card>
-          <h3 className="text-xl font-semibold">Risk Alerts</h3>
+          <h3 className="text-xl font-semibold">Alertas de Risco</h3>
           <p className="mt-2 text-sm text-shell-foreground-dim">
             {metrics.totalReports} denuncias abertas no fluxo administrativo.
           </p>

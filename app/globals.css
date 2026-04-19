@@ -81,14 +81,17 @@
   --font-mono: var(--font-ibm-plex-mono);
 }
 
+html,
 body {
-  background:
-    radial-gradient(circle at 85% -20%, var(--body-orb-1), transparent 35%),
-    radial-gradient(circle at 20% 120%, var(--body-orb-2), transparent 30%),
-    var(--shell);
+  background: var(--shell);
+  min-height: 100%;
+}
+
+body {
   color: var(--shell-foreground);
   font-family: var(--font-space-grotesk), sans-serif;
-  transition: background-color 200ms ease, color 200ms ease;
+  margin: 0;
+  transition: background-color 180ms ease, color 180ms ease;
 }
 
 * {
@@ -104,6 +107,14 @@ body {
   background: linear-gradient(180deg, var(--surface-glass-start), var(--surface-glass-end));
   border: 1px solid var(--surface-glass-border);
   backdrop-filter: blur(8px);
+}
+
+.admin-shell-bg {
+  background-color: var(--shell);
+  background-image:
+    radial-gradient(circle at 12% -18%, var(--body-orb-1), transparent 42%),
+    radial-gradient(circle at 88% -22%, var(--body-orb-2), transparent 36%);
+  background-attachment: fixed;
 }
 
 .card-glow {

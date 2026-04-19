@@ -15,13 +15,13 @@ export function ReviewsContent() {
   }
 
   if (reviewsQuery.isError) {
-    return <ErrorState message="Falha ao carregar reviews." />;
+    return <ErrorState message="Falha ao carregar avaliacoes." />;
   }
 
   const reviews = reviewsQuery.data ?? [];
 
   if (reviews.length === 0) {
-    return <EmptyState title="Sem reviews no momento" description="Nao ha avaliacoes para analise." />;
+    return <EmptyState title="Sem avaliacoes no momento" description="Nao ha avaliacoes para analise." />;
   }
 
   return (
@@ -29,7 +29,7 @@ export function ReviewsContent() {
       {reviews.map((review) => (
         <Card key={review.id}>
           <div className="mb-2 flex items-center justify-between">
-            <p className="font-semibold">Rating: {review.rating}/5</p>
+            <p className="font-semibold">Avaliacao: {review.rating}/5</p>
             <Badge label={review.rating <= 2 ? "SUSPEITO" : "OK"} tone={review.rating <= 2 ? "danger" : "success"} />
           </div>
           <p className="text-sm text-shell-foreground-dim">{review.comment ?? "Sem comentario."}</p>

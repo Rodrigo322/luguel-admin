@@ -14,6 +14,15 @@ import type { RentalRecord } from "@/modules/shared/types";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
 import { toErrorMessage } from "@/lib/http-errors";
 
+function rentalStatusLabel(status: RentalRecord["status"]): string {
+  if (status === "REQUESTED") return "Solicitado";
+  if (status === "APPROVED") return "Aprovado";
+  if (status === "ACTIVE") return "Ativo";
+  if (status === "COMPLETED") return "Concluido";
+  if (status === "CANCELED") return "Cancelado";
+  return "Em disputa";
+}
+
 export function RentalsContent() {
   const rentalsQuery = useRentals();
   const [selectedRental, setSelectedRental] = useState<RentalRecord | null>(null);
@@ -36,7 +45,7 @@ export function RentalsContent() {
       {rentals.length === 0 ? (
         <EmptyState title="Sem locacoes" description="Nao ha locacoes registradas para visualizacao administrativa." />
       ) : (
-        <DataTable columns={["Rental ID", "Listing", "Periodo", "Status", "Total", "Acoes"]}>
+        <DataTable columns={["ID da Locacao", "Anuncio", "Periodo", "Situacao", "Total", "Acoes"]}>
           {rentals.map((rental) => (
             <tr key={rental.id} className="border-t border-border-subtle/60">
               <td className="px-4 py-4 font-semibold">#{rental.id.slice(0, 8)}</td>
@@ -45,7 +54,7 @@ export function RentalsContent() {
                 {formatDateTime(rental.startDate)} - {formatDateTime(rental.endDate)}
               </td>
               <td className="px-4 py-4">
-                <Badge label={rental.status} tone={rental.status === "DISPUTED" ? "danger" : "default"} />
+                <Badge label={rentalStatusLabel(rental.status)} tone={rental.status === "DISPUTED" ? "danger" : "default"} />
               </td>
               <td className="px-4 py-4">{formatCurrency(rental.totalPrice)}</td>
               <td className="px-4 py-4">
@@ -68,16 +77,16 @@ export function RentalsContent() {
         {detailsQuery.data && (
           <div className="space-y-4">
             <div className="rounded-xl border border-border-subtle bg-shell-muted/70 p-3 text-sm">
-              <p>Tenant: {detailsQuery.data.tenantId}</p>
-              <p>Listing: {detailsQuery.data.listingId}</p>
-              <p>Status atual: {detailsQuery.data.status}</p>
+              <p>Locatario: {detailsQuery.data.tenantId}</p>
+              <p>Anuncio: {detailsQuery.data.listingId}</p>
+              <p>Situacao atual: {rentalStatusLabel(detailsQuery.data.status)}</p>
             </div>
             <div className="flex items-center gap-2">
               <Select value={status} onChange={(event) => setStatus(event.target.value as typeof status)}>
-                <option value="APPROVED">APPROVED</option>
-                <option value="ACTIVE">ACTIVE</option>
-                <option value="COMPLETED">COMPLETED</option>
-                <option value="CANCELED">CANCELED</option>
+                <option value="APPROVED">Aprovado</option>
+                <option value="ACTIVE">Ativo</option>
+                <option value="COMPLETED">Concluido</option>
+                <option value="CANCELED">Cancelado</option>
               </Select>
               <Button
                 variant="primary"

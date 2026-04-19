@@ -28,17 +28,17 @@ export function GrowthChart({ usersCount, rentalsCount }: GrowthChartProps) {
     <div className="h-72 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
-          <XAxis dataKey="month" stroke="#95a3c8" axisLine={false} tickLine={false} />
-          <YAxis stroke="#95a3c8" axisLine={false} tickLine={false} />
+          <XAxis dataKey="month" stroke="var(--shell-foreground-dim)" axisLine={false} tickLine={false} />
+          <YAxis stroke="var(--shell-foreground-dim)" axisLine={false} tickLine={false} />
           <Tooltip
             contentStyle={{
-              background: "#0f1730",
-              border: "1px solid rgba(177, 188, 255, 0.2)",
+              background: "var(--shell-elevated)",
+              border: "1px solid var(--border-subtle)",
               borderRadius: 12
             }}
           />
-          <Line type="monotone" dataKey="users" stroke="#8f90ff" strokeWidth={3} dot={false} />
-          <Line type="monotone" dataKey="rentals" stroke="#d9deef" strokeWidth={2} strokeDasharray="5 4" dot={false} />
+          <Line type="monotone" dataKey="users" stroke="var(--accent)" strokeWidth={3} dot={false} />
+          <Line type="monotone" dataKey="rentals" stroke="var(--shell-foreground-dim)" strokeWidth={2} strokeDasharray="5 4" dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>
