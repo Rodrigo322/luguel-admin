@@ -225,7 +225,7 @@ export function BoostContent() {
 
           <div className="mb-3 grid gap-2 md:grid-cols-2">
             <Select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as BoostStatusFilter)}>
-              <option value="ALL">Status: Todos</option>
+              <option value="ALL">Situacao: Todos</option>
               <option value="ACTIVE">Ativo</option>
               <option value="PENDING">Pendente</option>
               <option value="PAID">Pago</option>
@@ -246,7 +246,7 @@ export function BoostContent() {
               description="Ajuste os filtros ou crie um novo impulsionamento para comecar."
             />
           ) : (
-            <DataTable columns={["Anuncio", "Status", "Investimento", "Periodo", "Eficiencia", "Risco"]} className="overflow-x-auto">
+            <DataTable columns={["Anuncio", "Situacao", "Investimento", "Periodo", "Eficiencia", "Risco"]} className="overflow-x-auto">
               {visibleBoosts.map((boost) => (
                 <tr key={boost.id} className="border-t border-border-subtle bg-shell-elevated/45">
                   <td className="px-4 py-3 align-top">
@@ -315,7 +315,7 @@ export function BoostContent() {
                 <p className="font-semibold">{topCampaign.listingTitle}</p>
                 <p className="text-sm text-shell-foreground-dim">{formatCurrency(topCampaign.amount)} investido</p>
                 <p className="text-sm text-shell-foreground-dim">
-                  Status atual: <span className="font-semibold text-shell-foreground">{labelByBoostStatus(topCampaign.status)}</span>
+                  Situacao atual: <span className="font-semibold text-shell-foreground">{labelByBoostStatus(topCampaign.status)}</span>
                 </p>
               </div>
             ) : (

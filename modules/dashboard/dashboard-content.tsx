@@ -12,11 +12,11 @@ export function DashboardContent() {
   const metricsQuery = useDashboardMetrics();
 
   if (metricsQuery.isLoading) {
-    return <LoadingState label="Carregando metricas do dashboard..." />;
+    return <LoadingState label="Carregando metricas do painel..." />;
   }
 
   if (metricsQuery.isError || !metricsQuery.data) {
-    return <ErrorState message="Nao foi possivel carregar as metricas do dashboard." />;
+    return <ErrorState message="Nao foi possivel carregar as metricas do painel." />;
   }
 
   const metrics = metricsQuery.data;

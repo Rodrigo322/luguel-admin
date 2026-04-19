@@ -82,7 +82,7 @@ export function ReportsContent() {
             setPage(1);
           }}
         >
-          <option value="ALL">Todos status</option>
+          <option value="ALL">Todas situacoes</option>
           <option value="OPEN">Aberta</option>
           <option value="TRIAGED">Triada</option>
           <option value="RESOLVED">Resolvida</option>
@@ -155,7 +155,7 @@ export function ReportsContent() {
                   <p className="font-mono text-xs uppercase tracking-[0.2em] text-danger">Caso urgente</p>
                   <h2 className="mt-1 text-3xl font-semibold">{selectedReport.reason}</h2>
                 </header>
-                <p className="text-xs text-shell-foreground-dim">Status: {reportStatusLabel(selectedReport.status)}</p>
+                <p className="text-xs text-shell-foreground-dim">Situacao: {reportStatusLabel(selectedReport.status)}</p>
                 <p className="text-shell-foreground-dim">{selectedReport.details ?? "Sem descricao adicional no reporte."}</p>
                 <Input value={reason} onChange={(event) => setReason(event.target.value)} />
                 <div className="grid gap-2 sm:grid-cols-2">

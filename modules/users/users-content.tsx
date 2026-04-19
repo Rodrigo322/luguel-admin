@@ -112,14 +112,14 @@ export function UsersContent() {
               <p className="text-sm text-shell-foreground-dim">Nome</p>
               <p className="font-semibold">{detailsQuery.data.name}</p>
               <p className="mt-2 text-sm text-shell-foreground-dim">Criado em</p>
-              <p>{detailsQuery.data.createdAt ? formatDateTime(detailsQuery.data.createdAt) : "N/A"}</p>
+              <p>{detailsQuery.data.createdAt ? formatDateTime(detailsQuery.data.createdAt) : "Nao disponivel"}</p>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-shell-foreground-dim">Alterar perfil</label>
               <div className="flex gap-2">
                 <Select value={nextRole} onChange={(event) => setNextRole(event.target.value as "LOCADOR" | "LOCATARIO")}>
-                  <option value="LOCADOR">LOCADOR</option>
-                  <option value="LOCATARIO">LOCATARIO</option>
+                  <option value="LOCADOR">Locador</option>
+                  <option value="LOCATARIO">Locatario</option>
                 </Select>
                 <Button
                   variant="secondary"

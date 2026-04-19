@@ -63,7 +63,7 @@ export function SettingsContent() {
       <Card>
         <h3 className="text-xl font-semibold">Paleta Global</h3>
         <p className="mb-4 mt-1 text-sm text-shell-foreground-dim">
-          Tokens globais usados no dashboard para manter consistencia entre modo claro e escuro.
+          Tokens globais usados no painel para manter consistencia entre modo claro e escuro.
         </p>
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {COLOR_TOKENS.map((token) => (
