@@ -5,14 +5,8 @@ import { Bell, LogOut, RefreshCw, Search, Shield } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { formatUserRole } from "@/modules/shared/labels";
 import { useLogout, useRefreshSession, useSession } from "@/hooks/use-session";
-
-function roleLabel(role?: string): string {
-  if (role === "LOCADOR") return "Locador";
-  if (role === "LOCATARIO") return "Locatario";
-  if (role === "ADMIN") return "Administrador";
-  return "Administrador";
-}
 
 export function Header() {
   const router = useRouter();
@@ -50,7 +44,7 @@ export function Header() {
           <div className="rounded-xl border border-border-subtle bg-shell-muted/70 px-3 py-2">
             <p className="text-sm font-semibold text-shell-foreground">{user?.name ?? "Administrador"}</p>
             <p className="font-mono text-[11px] uppercase tracking-wider text-shell-foreground-dim">
-              {roleLabel(user?.role)}
+              {formatUserRole(user?.role ?? "ADMIN")}
             </p>
           </div>
           <Button

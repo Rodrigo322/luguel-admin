@@ -11,17 +11,9 @@ import { Modal } from "@/components/ui/modal";
 import { Select } from "@/components/ui/select";
 import { useRentalById, useRentals, useUpdateRentalStatus } from "@/modules/rentals/queries";
 import type { RentalRecord } from "@/modules/shared/types";
+import { formatRentalStatus } from "@/modules/shared/labels";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
 import { toErrorMessage } from "@/lib/http-errors";
-
-function rentalStatusLabel(status: RentalRecord["status"]): string {
-  if (status === "REQUESTED") return "Solicitado";
-  if (status === "APPROVED") return "Aprovado";
-  if (status === "ACTIVE") return "Ativo";
-  if (status === "COMPLETED") return "Concluido";
-  if (status === "CANCELED") return "Cancelado";
-  return "Em disputa";
-}
 
 export function RentalsContent() {
   const rentalsQuery = useRentals();
@@ -54,7 +46,7 @@ export function RentalsContent() {
                 {formatDateTime(rental.startDate)} - {formatDateTime(rental.endDate)}
               </td>
               <td className="px-4 py-4">
-                <Badge label={rentalStatusLabel(rental.status)} tone={rental.status === "DISPUTED" ? "danger" : "default"} />
+                <Badge label={formatRentalStatus(rental.status)} tone={rental.status === "DISPUTED" ? "danger" : "default"} />
               </td>
               <td className="px-4 py-4">{formatCurrency(rental.totalPrice)}</td>
               <td className="px-4 py-4">
@@ -79,7 +71,7 @@ export function RentalsContent() {
             <div className="rounded-xl border border-border-subtle bg-shell-muted/70 p-3 text-sm">
               <p>Locatario: {detailsQuery.data.tenantId}</p>
               <p>Anuncio: {detailsQuery.data.listingId}</p>
-              <p>Situacao atual: {rentalStatusLabel(detailsQuery.data.status)}</p>
+              <p>Situacao atual: {formatRentalStatus(detailsQuery.data.status)}</p>
             </div>
             <div className="flex items-center gap-2">
               <Select value={status} onChange={(event) => setStatus(event.target.value as typeof status)}>

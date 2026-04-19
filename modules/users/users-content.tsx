@@ -14,19 +14,8 @@ import { Select } from "@/components/ui/select";
 import { useBanUser, useUpdateUserRole, useUserById, useUsers } from "@/modules/users/queries";
 import { toErrorMessage } from "@/lib/http-errors";
 import type { UserRecord } from "@/modules/shared/types";
+import { formatUserAccountStatus, formatUserRole } from "@/modules/shared/labels";
 import { formatDateTime } from "@/lib/utils";
-
-function roleLabel(role: UserRecord["role"]): string {
-  if (role === "ADMIN") {
-    return "Administrador";
-  }
-
-  if (role === "LOCADOR") {
-    return "Locador";
-  }
-
-  return "Locatario";
-}
 
 export function UsersContent() {
   const usersQuery = useUsers();
@@ -87,10 +76,10 @@ export function UsersContent() {
                 <p className="text-sm text-shell-foreground-dim">{user.email}</p>
               </td>
               <td className="px-4 py-4">
-                <Badge label={roleLabel(user.role)} tone={user.role === "ADMIN" ? "accent" : "default"} />
+                <Badge label={formatUserRole(user.role)} tone={user.role === "ADMIN" ? "accent" : "default"} />
               </td>
               <td className="px-4 py-4">
-                <Badge label={user.isBanned ? "Banido" : "Ativo"} tone={user.isBanned ? "danger" : "success"} />
+                <Badge label={formatUserAccountStatus(user.isBanned)} tone={user.isBanned ? "danger" : "success"} />
               </td>
               <td className="px-4 py-4 text-sm font-semibold">{user.reputationScore}</td>
               <td className="px-4 py-4">

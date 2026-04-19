@@ -18,6 +18,7 @@ import { createBoostSchema, type CreateBoostSchema } from "@/schemas/boost-schem
 import { useBoostList, useCreateBoost } from "@/modules/boost/queries";
 import { useListings } from "@/modules/listings/queries";
 import { useDashboardMetrics } from "@/modules/dashboard/queries";
+import { formatBoostStatus, formatRiskLevel } from "@/modules/shared/labels";
 import { toErrorMessage } from "@/lib/http-errors";
 import { formatCompactNumber, formatCurrency, formatDateTime } from "@/lib/utils";
 
@@ -41,22 +42,6 @@ function toneByStatus(status: BoostStatusFilter): "default" | "success" | "warni
   }
 
   return "default";
-}
-
-function labelByBoostStatus(status: BoostStatusFilter): string {
-  if (status === "ACTIVE") return "Ativo";
-  if (status === "PENDING") return "Pendente";
-  if (status === "PAID") return "Pago";
-  if (status === "EXPIRED") return "Expirado";
-  if (status === "CANCELED") return "Cancelado";
-  return "Todos";
-}
-
-function riskLevelLabel(risk: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"): string {
-  if (risk === "LOW") return "Baixo";
-  if (risk === "MEDIUM") return "Medio";
-  if (risk === "HIGH") return "Alto";
-  return "Critico";
 }
 
 export function BoostContent() {
@@ -232,12 +217,12 @@ export function BoostContent() {
 
           <div className="mb-3 grid gap-2 md:grid-cols-2">
             <Select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as BoostStatusFilter)}>
-              <option value="ALL">Situacao: Todos</option>
-              <option value="ACTIVE">Ativo</option>
-              <option value="PENDING">Pendente</option>
-              <option value="PAID">Pago</option>
-              <option value="EXPIRED">Expirado</option>
-              <option value="CANCELED">Cancelado</option>
+              <option value="ALL">Situacao: {formatBoostStatus("ALL")}</option>
+              <option value="ACTIVE">{formatBoostStatus("ACTIVE")}</option>
+              <option value="PENDING">{formatBoostStatus("PENDING")}</option>
+              <option value="PAID">{formatBoostStatus("PAID")}</option>
+              <option value="EXPIRED">{formatBoostStatus("EXPIRED")}</option>
+              <option value="CANCELED">{formatBoostStatus("CANCELED")}</option>
             </Select>
             <Select value={sortMode} onChange={(event) => setSortMode(event.target.value as SortMode)}>
               <option value="EFFICIENCY">Ordenar: Eficiencia</option>
@@ -261,7 +246,7 @@ export function BoostContent() {
                     <p className="font-mono text-xs text-shell-foreground-dim">{boost.listingId}</p>
                   </td>
                   <td className="px-4 py-3 align-top">
-                    <Badge label={labelByBoostStatus(boost.status)} tone={toneByStatus(boost.status)} />
+                    <Badge label={formatBoostStatus(boost.status)} tone={toneByStatus(boost.status)} />
                     {boost.isEndingSoon && <Badge label="ENCERRA EM BREVE" tone="warning" className="ml-2" />}
                   </td>
                   <td className="px-4 py-3 align-top">
@@ -282,7 +267,7 @@ export function BoostContent() {
                   <td className="px-4 py-3 align-top">
                     {boost.listingRisk ? (
                       <Badge
-                        label={riskLevelLabel(boost.listingRisk)}
+                        label={formatRiskLevel(boost.listingRisk)}
                         tone={boost.listingRisk === "HIGH" || boost.listingRisk === "CRITICAL" ? "danger" : "default"}
                       />
                     ) : (
@@ -322,7 +307,7 @@ export function BoostContent() {
                 <p className="font-semibold">{topCampaign.listingTitle}</p>
                 <p className="text-sm text-shell-foreground-dim">{formatCurrency(topCampaign.amount)} investido</p>
                 <p className="text-sm text-shell-foreground-dim">
-                  Situacao atual: <span className="font-semibold text-shell-foreground">{labelByBoostStatus(topCampaign.status)}</span>
+                  Situacao atual: <span className="font-semibold text-shell-foreground">{formatBoostStatus(topCampaign.status)}</span>
                 </p>
               </div>
             ) : (

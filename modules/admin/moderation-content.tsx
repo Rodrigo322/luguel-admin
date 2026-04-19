@@ -9,15 +9,9 @@ import { ErrorState } from "@/components/ui/error-state";
 import { LoadingState } from "@/components/ui/loading-state";
 import { useApproveListing, useListings, useSuspendListing } from "@/modules/listings/queries";
 import { useCriticalReports, usePunishUser, useReviewReport, useTakeDownContent } from "@/modules/reports/queries";
+import { formatRiskLevel } from "@/modules/shared/labels";
 import { useUsers } from "@/modules/users/queries";
 import { toErrorMessage } from "@/lib/http-errors";
-
-function riskLabel(risk: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"): string {
-  if (risk === "LOW") return "Baixo";
-  if (risk === "MEDIUM") return "Medio";
-  if (risk === "HIGH") return "Alto";
-  return "Critico";
-}
 
 export function ModerationContent() {
   const pendingListingsQuery = useListings("PENDING_VALIDATION");
@@ -84,7 +78,7 @@ export function ModerationContent() {
             <div key={listing.id} className="rounded-xl border border-danger/35 bg-danger-muted/40 p-4">
               <p className="font-semibold">{listing.title}</p>
               <p className="line-clamp-2 text-sm text-shell-foreground-dim">{listing.description}</p>
-              <p className="mt-2 text-xs text-shell-foreground-dim">Risco: {riskLabel(listing.riskLevel)}</p>
+              <p className="mt-2 text-xs text-shell-foreground-dim">Risco: {formatRiskLevel(listing.riskLevel)}</p>
               <div className="mt-3 flex gap-2">
                 <Button
                   variant="primary"
@@ -130,7 +124,7 @@ export function ModerationContent() {
               <p className="font-semibold">{report.reason}</p>
               <p className="text-sm text-shell-foreground-dim">{report.details ?? "Sem detalhes adicionais."}</p>
               <p className="mt-2 text-xs text-shell-foreground-dim">
-                Alvo: {report.subjectUserId ?? "nao identificado"} | Risco: {riskLabel(report.riskLevel)}
+                Alvo: {report.subjectUserId ?? "nao identificado"} | Risco: {formatRiskLevel(report.riskLevel)}
               </p>
               <div className="mt-3 flex gap-2">
                 <Button

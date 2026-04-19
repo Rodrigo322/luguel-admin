@@ -18,6 +18,7 @@ import {
   useSuspendListing
 } from "@/modules/listings/queries";
 import type { ListingRecord, ListingStatus } from "@/modules/shared/types";
+import { formatListingStatus, formatRiskLevel } from "@/modules/shared/labels";
 import { toErrorMessage } from "@/lib/http-errors";
 import { formatCurrency } from "@/lib/utils";
 
@@ -35,33 +36,6 @@ function listingBadgeTone(status: ListingStatus): "default" | "success" | "warni
   }
 
   return "accent";
-}
-
-function listingStatusLabel(status: ListingStatus): string {
-  if (status === "ACTIVE") {
-    return "Ativo";
-  }
-
-  if (status === "PENDING_VALIDATION") {
-    return "Pendente";
-  }
-
-  if (status === "SUSPENDED") {
-    return "Bloqueado";
-  }
-
-  if (status === "ARCHIVED") {
-    return "Removido";
-  }
-
-  return "Sinalizado";
-}
-
-function riskLevelLabel(risk: ListingRecord["riskLevel"]): string {
-  if (risk === "LOW") return "Baixo";
-  if (risk === "MEDIUM") return "Medio";
-  if (risk === "HIGH") return "Alto";
-  return "Critico";
 }
 
 export function ListingsContent() {
@@ -107,9 +81,9 @@ export function ListingsContent() {
           {listings.map((listing) => (
             <Card key={listing.id} className="space-y-3">
               <div className="flex items-center justify-between">
-                <Badge label={listingStatusLabel(listing.status)} tone={listingBadgeTone(listing.status)} />
+                <Badge label={formatListingStatus(listing.status)} tone={listingBadgeTone(listing.status)} />
                 <Badge
-                  label={`RISCO ${riskLevelLabel(listing.riskLevel)}`}
+                  label={`RISCO ${formatRiskLevel(listing.riskLevel)}`}
                   tone={listing.riskLevel === "CRITICAL" || listing.riskLevel === "HIGH" ? "danger" : "default"}
                 />
               </div>

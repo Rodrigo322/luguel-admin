@@ -16,24 +16,11 @@ import {
   useTakeDownContent
 } from "@/modules/reports/queries";
 import type { ReportRecord, ReportStatus, RiskLevel } from "@/modules/shared/types";
+import { formatReportStatus, formatRiskLevel } from "@/modules/shared/labels";
 import { formatDateTime } from "@/lib/utils";
 import { toErrorMessage } from "@/lib/http-errors";
 
 const PAGE_SIZE = 10;
-
-function reportStatusLabel(status: ReportStatus): string {
-  if (status === "OPEN") return "Aberta";
-  if (status === "TRIAGED") return "Triada";
-  if (status === "RESOLVED") return "Resolvida";
-  return "Rejeitada";
-}
-
-function riskLevelLabel(riskLevel: RiskLevel): string {
-  if (riskLevel === "LOW") return "Baixo";
-  if (riskLevel === "MEDIUM") return "Medio";
-  if (riskLevel === "HIGH") return "Alto";
-  return "Critico";
-}
 
 export function ReportsContent() {
   const [search, setSearch] = useState("");
@@ -114,7 +101,7 @@ export function ReportsContent() {
             {reports.map((report) => (
               <Card key={report.id} className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Badge label={riskLevelLabel(report.riskLevel)} tone={report.riskLevel === "CRITICAL" ? "danger" : "warning"} />
+                  <Badge label={formatRiskLevel(report.riskLevel)} tone={report.riskLevel === "CRITICAL" ? "danger" : "warning"} />
                   <span className="text-xs text-shell-foreground-dim">{formatDateTime(report.createdAt)}</span>
                 </div>
                 <h3 className="text-lg font-semibold">{report.reason}</h3>
@@ -155,7 +142,7 @@ export function ReportsContent() {
                   <p className="font-mono text-xs uppercase tracking-[0.2em] text-danger">Caso urgente</p>
                   <h2 className="mt-1 text-3xl font-semibold">{selectedReport.reason}</h2>
                 </header>
-                <p className="text-xs text-shell-foreground-dim">Situacao: {reportStatusLabel(selectedReport.status)}</p>
+                <p className="text-xs text-shell-foreground-dim">Situacao: {formatReportStatus(selectedReport.status)}</p>
                 <p className="text-shell-foreground-dim">{selectedReport.details ?? "Sem descricao adicional no reporte."}</p>
                 <Input value={reason} onChange={(event) => setReason(event.target.value)} />
                 <div className="grid gap-2 sm:grid-cols-2">
