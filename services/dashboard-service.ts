@@ -10,6 +10,9 @@ export interface DashboardMetrics {
   pendingListings: number;
   activeBoosts: number;
   bannedUsers: number;
+  verifiedUsers: number;
+  premiumAdvertisers: number;
+  totalCommissionRevenue: number;
 }
 
 export async function getDashboardMetrics(): Promise<DashboardMetrics> {
