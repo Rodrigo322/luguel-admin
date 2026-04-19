@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-:root {
+:root,
+[data-theme="dark"] {
   --shell: #040815;
   --shell-elevated: #0b1226;
   --shell-muted: #111a33;
@@ -8,11 +9,58 @@
   --shell-foreground-dim: #95a3c8;
   --accent: #8f90ff;
   --accent-strong: #6a6cf6;
+  --accent-contrast: #060b1d;
   --danger: #ff5d7a;
   --danger-muted: #39101c;
   --success: #2de5a0;
   --warning: #ffb84d;
   --border-subtle: rgba(177, 188, 255, 0.2);
+  --surface-glass-start: rgba(23, 34, 65, 0.8);
+  --surface-glass-end: rgba(8, 13, 27, 0.9);
+  --surface-glass-border: rgba(150, 165, 255, 0.2);
+  --surface-shadow: 3, 7, 18;
+  --body-orb-1: rgba(129, 130, 255, 0.32);
+  --body-orb-2: rgba(255, 78, 127, 0.18);
+  --selection-bg: rgba(143, 144, 255, 0.35);
+  --selection-fg: #ffffff;
+  --success-soft: rgba(45, 229, 160, 0.15);
+  --success-border: rgba(45, 229, 160, 0.3);
+  --warning-soft: rgba(255, 184, 77, 0.15);
+  --warning-border: rgba(255, 184, 77, 0.3);
+  --danger-soft: rgba(255, 93, 122, 0.18);
+  --danger-border: rgba(255, 93, 122, 0.35);
+  --scroll-thumb: rgba(128, 140, 198, 0.45);
+}
+
+[data-theme="light"] {
+  --shell: #f3f6ff;
+  --shell-elevated: #ffffff;
+  --shell-muted: #e8eefc;
+  --shell-foreground: #141b34;
+  --shell-foreground-dim: #5d698e;
+  --accent: #4d57f6;
+  --accent-strong: #3d47d7;
+  --accent-contrast: #ffffff;
+  --danger: #d63b57;
+  --danger-muted: #ffeaf0;
+  --success: #0f9d70;
+  --warning: #b97310;
+  --border-subtle: rgba(77, 95, 150, 0.24);
+  --surface-glass-start: rgba(255, 255, 255, 0.96);
+  --surface-glass-end: rgba(235, 242, 255, 0.95);
+  --surface-glass-border: rgba(124, 142, 201, 0.28);
+  --surface-shadow: 30, 45, 92;
+  --body-orb-1: rgba(93, 115, 255, 0.2);
+  --body-orb-2: rgba(255, 103, 140, 0.12);
+  --selection-bg: rgba(77, 87, 246, 0.28);
+  --selection-fg: #ffffff;
+  --success-soft: rgba(15, 157, 112, 0.14);
+  --success-border: rgba(15, 157, 112, 0.34);
+  --warning-soft: rgba(185, 115, 16, 0.14);
+  --warning-border: rgba(185, 115, 16, 0.32);
+  --danger-soft: rgba(214, 59, 87, 0.14);
+  --danger-border: rgba(214, 59, 87, 0.32);
+  --scroll-thumb: rgba(97, 115, 170, 0.45);
 }
 
 @theme inline {
@@ -23,6 +71,7 @@
   --color-shell-foreground-dim: var(--shell-foreground-dim);
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
+  --color-accent-contrast: var(--accent-contrast);
   --color-danger: var(--danger);
   --color-danger-muted: var(--danger-muted);
   --color-success: var(--success);
@@ -34,11 +83,12 @@
 
 body {
   background:
-    radial-gradient(circle at 85% -20%, rgba(129, 130, 255, 0.32), transparent 35%),
-    radial-gradient(circle at 20% 120%, rgba(255, 78, 127, 0.18), transparent 30%),
+    radial-gradient(circle at 85% -20%, var(--body-orb-1), transparent 35%),
+    radial-gradient(circle at 20% 120%, var(--body-orb-2), transparent 30%),
     var(--shell);
   color: var(--shell-foreground);
   font-family: var(--font-space-grotesk), sans-serif;
+  transition: background-color 200ms ease, color 200ms ease;
 }
 
 * {
@@ -46,25 +96,25 @@ body {
 }
 
 ::selection {
-  background: rgba(143, 144, 255, 0.35);
-  color: #ffffff;
+  background: var(--selection-bg);
+  color: var(--selection-fg);
 }
 
 .glass {
-  background: linear-gradient(180deg, rgba(23, 34, 65, 0.8), rgba(8, 13, 27, 0.9));
-  border: 1px solid rgba(150, 165, 255, 0.2);
+  background: linear-gradient(180deg, var(--surface-glass-start), var(--surface-glass-end));
+  border: 1px solid var(--surface-glass-border);
   backdrop-filter: blur(8px);
 }
 
 .card-glow {
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 14px 32px rgba(3, 7, 18, 0.45);
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 14px 32px rgba(var(--surface-shadow), 0.28);
 }
 
 .scroll-thin {
   scrollbar-width: thin;
-  scrollbar-color: rgba(128, 140, 198, 0.45) transparent;
+  scrollbar-color: var(--scroll-thumb) transparent;
 }
 
 .scroll-thin::-webkit-scrollbar {
@@ -73,7 +123,7 @@ body {
 }
 
 .scroll-thin::-webkit-scrollbar-thumb {
-  background: rgba(128, 140, 198, 0.45);
+  background: var(--scroll-thumb);
   border-radius: 999px;
 }
 
