@@ -52,6 +52,13 @@ function labelByBoostStatus(status: BoostStatusFilter): string {
   return "Todos";
 }
 
+function riskLevelLabel(risk: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"): string {
+  if (risk === "LOW") return "Baixo";
+  if (risk === "MEDIUM") return "Medio";
+  if (risk === "HIGH") return "Alto";
+  return "Critico";
+}
+
 export function BoostContent() {
   const [statusFilter, setStatusFilter] = useState<BoostStatusFilter>("ALL");
   const [sortMode, setSortMode] = useState<SortMode>("EFFICIENCY");
@@ -275,7 +282,7 @@ export function BoostContent() {
                   <td className="px-4 py-3 align-top">
                     {boost.listingRisk ? (
                       <Badge
-                        label={boost.listingRisk}
+                        label={riskLevelLabel(boost.listingRisk)}
                         tone={boost.listingRisk === "HIGH" || boost.listingRisk === "CRITICAL" ? "danger" : "default"}
                       />
                     ) : (
