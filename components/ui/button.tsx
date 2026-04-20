@@ -14,9 +14,9 @@ const VARIANT_STYLES: Record<ButtonVariant, string> = {
   primary:
     "bg-gradient-to-b from-accent to-accent-strong text-[var(--accent-contrast)] hover:brightness-105 disabled:opacity-70",
   secondary:
-    "bg-shell-high text-shell-foreground hover:bg-shell-muted disabled:opacity-60",
+    "bg-transparent text-accent hover:bg-shell-high/70 disabled:opacity-60",
   danger: "bg-danger text-white hover:bg-danger/80 disabled:opacity-70",
-  ghost: "bg-transparent text-accent-strong hover:bg-shell-muted/70"
+  ghost: "bg-shell-high text-shell-foreground hover:bg-shell-muted"
 };
 
 export function Button({ className, variant = "primary", loading, children, ...props }: ButtonProps) {
