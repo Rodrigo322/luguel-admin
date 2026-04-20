@@ -18,7 +18,7 @@ export function Header() {
   const user = sessionQuery.data?.user;
 
   return (
-    <header className="glass sticky top-0 z-30 mb-6 rounded-2xl border border-border-subtle px-4 py-3">
+    <header className="glass sticky top-0 z-30 mb-6 rounded px-4 py-3">
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative min-w-64 flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-shell-foreground-dim" />
@@ -41,7 +41,7 @@ export function Header() {
           <Button variant="ghost" className="h-10 px-3">
             <Bell className="h-4 w-4" />
           </Button>
-          <div className="rounded-xl border border-border-subtle bg-shell-muted/70 px-3 py-2">
+          <div className="rounded-sm bg-shell-muted px-3 py-2">
             <p className="text-sm font-semibold text-shell-foreground">{user?.name ?? "Administrador"}</p>
             <p className="font-mono text-[11px] uppercase tracking-wider text-shell-foreground-dim">
               {formatUserRole(user?.role ?? "ADMIN")}
@@ -58,7 +58,7 @@ export function Header() {
             <LogOut className="h-4 w-4" />
             Sair
           </Button>
-          <div className="hidden items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-300 md:flex">
+          <div className="hidden items-center gap-1 rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-300 md:flex">
             <Shield className="h-3.5 w-3.5" />
             AO VIVO
           </div>

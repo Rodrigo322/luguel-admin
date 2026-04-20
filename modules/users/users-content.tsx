@@ -52,7 +52,7 @@ export function UsersContent() {
 
   return (
     <div className="space-y-5">
-      <div className="glass flex flex-wrap items-center gap-3 rounded-2xl p-4">
+      <div className="glass flex flex-wrap items-center gap-3 rounded p-4">
         <div className="relative min-w-72 flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-shell-foreground-dim" />
           <Input
@@ -70,19 +70,19 @@ export function UsersContent() {
       ) : (
         <DataTable columns={["Usuario", "Perfil", "Situacao", "Reputacao", "Diretivas"]}>
           {filteredUsers.map((user) => (
-            <tr key={user.id} className="border-t border-border-subtle/60">
-              <td className="px-4 py-4">
+            <tr key={user.id} className="data-table-row">
+              <td className="px-4 py-2">
                 <p className="font-semibold">{user.name}</p>
                 <p className="text-sm text-shell-foreground-dim">{user.email}</p>
               </td>
-              <td className="px-4 py-4">
+              <td className="px-4 py-2">
                 <Badge label={formatUserRole(user.role)} tone={user.role === "ADMIN" ? "accent" : "default"} />
               </td>
-              <td className="px-4 py-4">
+              <td className="px-4 py-2">
                 <Badge label={formatUserAccountStatus(user.isBanned)} tone={user.isBanned ? "danger" : "success"} />
               </td>
-              <td className="px-4 py-4 text-sm font-semibold">{user.reputationScore}</td>
-              <td className="px-4 py-4">
+              <td className="px-4 py-2 text-sm font-semibold">{user.reputationScore}</td>
+              <td className="px-4 py-2">
                 <Button variant="secondary" onClick={() => setSelectedUser(user)}>
                   Ver detalhes
                 </Button>
@@ -97,7 +97,7 @@ export function UsersContent() {
         {detailsQuery.isError && <ErrorState message="Nao foi possivel carregar detalhes do usuario." />}
         {detailsQuery.data && (
           <div className="space-y-4">
-            <div className="rounded-xl border border-border-subtle bg-shell-muted/70 p-3">
+            <div className="rounded-sm bg-shell-muted p-3">
               <p className="text-sm text-shell-foreground-dim">Nome</p>
               <p className="font-semibold">{detailsQuery.data.name}</p>
               <p className="mt-2 text-sm text-shell-foreground-dim">Criado em</p>

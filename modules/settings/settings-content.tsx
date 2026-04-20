@@ -11,8 +11,10 @@ const COLOR_TOKENS = [
   { label: "Base", variable: "--shell" },
   { label: "Elevado", variable: "--shell-elevated" },
   { label: "Suave", variable: "--shell-muted" },
+  { label: "Camada Alta", variable: "--shell-high" },
   { label: "Destaque", variable: "--accent" },
   { label: "Destaque Forte", variable: "--accent-strong" },
+  { label: "Borda Fantasma", variable: "--outline-variant" },
   { label: "Sucesso", variable: "--success" },
   { label: "Aviso", variable: "--warning" },
   { label: "Perigo", variable: "--danger" }
@@ -65,11 +67,11 @@ export function SettingsContent() {
         <p className="mb-4 mt-1 text-sm text-shell-foreground-dim">
           Tokens globais usados no painel para manter consistencia entre modo claro e escuro.
         </p>
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
           {COLOR_TOKENS.map((token) => (
-            <div key={token.variable} className="rounded-xl border border-border-subtle bg-shell-muted/55 p-3">
+            <div key={token.variable} className="rounded-sm bg-shell-muted p-3">
               <div
-                className={cn("mb-2 h-10 w-full rounded-md border border-border-subtle")}
+                className={cn("mb-2 h-10 w-full rounded-sm")}
                 style={{ backgroundColor: `var(${token.variable})` }}
               />
               <p className="text-sm font-semibold text-shell-foreground">{token.label}</p>

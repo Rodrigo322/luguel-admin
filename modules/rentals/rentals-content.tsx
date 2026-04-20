@@ -39,17 +39,17 @@ export function RentalsContent() {
       ) : (
         <DataTable columns={["ID da Locacao", "Anuncio", "Periodo", "Situacao", "Total", "Acoes"]}>
           {rentals.map((rental) => (
-            <tr key={rental.id} className="border-t border-border-subtle/60">
-              <td className="px-4 py-4 font-semibold">#{rental.id.slice(0, 8)}</td>
-              <td className="px-4 py-4 font-mono text-xs text-shell-foreground-dim">{rental.listingId.slice(0, 12)}</td>
-              <td className="px-4 py-4 text-sm">
+            <tr key={rental.id} className="data-table-row">
+              <td className="px-4 py-2 font-semibold">#{rental.id.slice(0, 8)}</td>
+              <td className="px-4 py-2 font-mono text-xs text-shell-foreground-dim">{rental.listingId.slice(0, 12)}</td>
+              <td className="px-4 py-2 text-sm">
                 {formatDateTime(rental.startDate)} - {formatDateTime(rental.endDate)}
               </td>
-              <td className="px-4 py-4">
+              <td className="px-4 py-2">
                 <Badge label={formatRentalStatus(rental.status)} tone={rental.status === "DISPUTED" ? "danger" : "default"} />
               </td>
-              <td className="px-4 py-4">{formatCurrency(rental.totalPrice)}</td>
-              <td className="px-4 py-4">
+              <td className="px-4 py-2">{formatCurrency(rental.totalPrice)}</td>
+              <td className="px-4 py-2">
                 <Button variant="secondary" onClick={() => setSelectedRental(rental)}>
                   Detalhes
                 </Button>
@@ -68,7 +68,7 @@ export function RentalsContent() {
         {detailsQuery.isError && <ErrorState message="Erro ao carregar detalhes da locacao." />}
         {detailsQuery.data && (
           <div className="space-y-4">
-            <div className="rounded-xl border border-border-subtle bg-shell-muted/70 p-3 text-sm">
+            <div className="rounded-sm bg-shell-muted p-3 text-sm">
               <p>Locatario: {detailsQuery.data.tenantId}</p>
               <p>Anuncio: {detailsQuery.data.listingId}</p>
               <p>Situacao atual: {formatRentalStatus(detailsQuery.data.status)}</p>

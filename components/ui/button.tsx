@@ -12,18 +12,18 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANT_STYLES: Record<ButtonVariant, string> = {
   primary:
-    "bg-accent text-[var(--accent-contrast)] hover:bg-accent-strong disabled:bg-accent/60 disabled:opacity-70",
+    "bg-gradient-to-b from-accent to-accent-strong text-[var(--accent-contrast)] hover:brightness-105 disabled:opacity-70",
   secondary:
-    "bg-shell-muted text-shell-foreground hover:bg-shell-muted/80 border border-border-subtle disabled:opacity-60",
+    "bg-shell-high text-shell-foreground hover:bg-shell-muted disabled:opacity-60",
   danger: "bg-danger text-white hover:bg-danger/80 disabled:opacity-70",
-  ghost: "bg-transparent text-shell-foreground-dim hover:bg-shell-muted/60"
+  ghost: "bg-transparent text-accent-strong hover:bg-shell-muted/70"
 };
 
 export function Button({ className, variant = "primary", loading, children, ...props }: ButtonProps) {
   return (
     <button
       className={cn(
-        "inline-flex h-11 items-center justify-center rounded-xl px-4 font-semibold transition-colors",
+        "inline-flex h-11 items-center justify-center rounded px-4 text-sm font-semibold transition-colors",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80",
         VARIANT_STYLES[variant],
         className

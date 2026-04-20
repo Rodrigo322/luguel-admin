@@ -53,7 +53,7 @@ export function ReportsContent() {
 
   return (
     <div className="space-y-5">
-      <div className="grid gap-3 rounded-2xl border border-border-subtle bg-shell-muted/50 p-4 lg:grid-cols-4">
+      <div className="grid gap-3 rounded bg-shell-muted p-4 lg:grid-cols-4">
         <Input
           value={search}
           onChange={(event) => {
@@ -112,7 +112,7 @@ export function ReportsContent() {
               </Card>
             ))}
             {pagination && pagination.totalPages > 1 && (
-              <div className="flex items-center justify-between rounded-xl border border-border-subtle bg-shell-muted/40 p-2">
+              <div className="flex items-center justify-between rounded-sm bg-shell-muted p-2">
                 <Button variant="secondary" disabled={page <= 1} onClick={() => setPage((current) => current - 1)}>
                   Anterior
                 </Button>

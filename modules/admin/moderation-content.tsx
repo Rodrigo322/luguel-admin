@@ -75,7 +75,7 @@ export function ModerationContent() {
         </div>
         <div className="grid gap-3 md:grid-cols-2">
           {pendingListings.map((listing) => (
-            <div key={listing.id} className="rounded-xl border border-danger/35 bg-danger-muted/40 p-4">
+            <div key={listing.id} className="rounded bg-danger-muted/75 p-4">
               <p className="font-semibold">{listing.title}</p>
               <p className="line-clamp-2 text-sm text-shell-foreground-dim">{listing.description}</p>
               <p className="mt-2 text-xs text-shell-foreground-dim">Risco: {formatRiskLevel(listing.riskLevel)}</p>
@@ -120,7 +120,7 @@ export function ModerationContent() {
         </div>
         <div className="space-y-3">
           {criticalReports.map((report) => (
-            <div key={report.id} className="rounded-xl border border-border-subtle bg-shell-muted/55 p-4">
+            <div key={report.id} className="rounded bg-shell-muted p-4">
               <p className="font-semibold">{report.reason}</p>
               <p className="text-sm text-shell-foreground-dim">{report.details ?? "Sem detalhes adicionais."}</p>
               <p className="mt-2 text-xs text-shell-foreground-dim">
@@ -184,7 +184,7 @@ export function ModerationContent() {
         ) : (
           <div className="space-y-3">
             {suspiciousUsers.map((entry) => (
-              <div key={entry.userId} className="rounded-xl border border-border-subtle bg-shell-muted/55 p-4">
+              <div key={entry.userId} className="rounded bg-shell-muted p-4">
                 <p className="font-semibold">{entry.user?.name ?? entry.userId}</p>
                 <p className="text-sm text-shell-foreground-dim">{entry.user?.email ?? "Email nao disponivel"}</p>
                 <p className="mt-2 text-xs text-shell-foreground-dim">{entry.reportCount} denuncia(s) critica(s)</p>

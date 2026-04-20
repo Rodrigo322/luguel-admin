@@ -240,7 +240,7 @@ export function BoostContent() {
           ) : (
             <DataTable columns={["Anuncio", "Situacao", "Investimento", "Periodo", "Eficiencia", "Risco"]} className="overflow-x-auto">
               {visibleBoosts.map((boost) => (
-                <tr key={boost.id} className="border-t border-border-subtle bg-shell-elevated/45">
+                <tr key={boost.id} className="data-table-row bg-shell-elevated/45">
                   <td className="px-4 py-3 align-top">
                     <p className="font-semibold">{boost.listingTitle}</p>
                     <p className="font-mono text-xs text-shell-foreground-dim">{boost.listingId}</p>
@@ -363,7 +363,7 @@ export function BoostContent() {
             </div>
           </div>
           <label className="flex items-center gap-2 text-sm text-shell-foreground-dim">
-            <input type="checkbox" {...form.register("paymentConfirmed")} className="h-4 w-4 rounded border-border-subtle" />
+            <input type="checkbox" {...form.register("paymentConfirmed")} className="h-4 w-4 rounded-sm border-[color:var(--outline-variant)]" />
             Pagamento confirmado
           </label>
           <div className="flex justify-end">

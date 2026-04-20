@@ -33,7 +33,8 @@ export function GrowthChart({ usersCount, rentalsCount }: GrowthChartProps) {
           <Tooltip
             contentStyle={{
               background: "var(--shell-elevated)",
-              border: "1px solid var(--border-subtle)",
+              border: "0",
+              boxShadow: "0 24px 40px rgba(var(--surface-shadow), 0.06)",
               borderRadius: 12
             }}
           />

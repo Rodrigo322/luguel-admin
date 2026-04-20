@@ -7,11 +7,11 @@ interface BadgeProps {
 }
 
 const toneStyles: Record<NonNullable<BadgeProps["tone"]>, string> = {
-  default: "bg-shell-muted text-shell-foreground-dim border border-border-subtle",
-  success: "bg-[var(--success-soft)] text-success border-[var(--success-border)] border",
-  warning: "bg-[var(--warning-soft)] text-warning border-[var(--warning-border)] border",
-  danger: "bg-[var(--danger-soft)] text-danger border-[var(--danger-border)] border",
-  accent: "bg-accent/18 text-accent border border-accent/35"
+  default: "bg-shell-muted text-shell-foreground-dim",
+  success: "bg-[var(--success-soft)] text-success",
+  warning: "bg-[var(--warning-soft)] text-warning",
+  danger: "bg-[var(--danger-soft)] text-danger",
+  accent: "bg-accent/16 text-accent"
 };
 
 export function Badge({ label, tone = "default", className }: BadgeProps) {

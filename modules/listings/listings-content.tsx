@@ -60,7 +60,7 @@ export function ListingsContent() {
 
   return (
     <div className="space-y-5">
-      <div className="glass flex flex-wrap items-center gap-3 rounded-2xl p-4">
+      <div className="glass flex flex-wrap items-center gap-3 rounded p-4">
         <Select
           value={statusFilter}
           onChange={(event) => setStatusFilter(event.target.value as ListingStatus | "ALL")}
@@ -105,7 +105,7 @@ export function ListingsContent() {
       >
         {selectedListing && (
           <div className="space-y-4">
-            <div className="rounded-xl border border-border-subtle bg-shell-muted/70 p-3">
+            <div className="rounded-sm bg-shell-muted p-3">
               <p className="text-sm text-shell-foreground-dim">Descricao completa</p>
               <p className="mt-2 text-sm">{selectedListing.description}</p>
             </div>

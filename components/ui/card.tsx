@@ -7,5 +7,5 @@ interface CardProps {
 }
 
 export function Card({ children, className }: CardProps) {
-  return <section className={cn("glass card-glow rounded-2xl p-5", className)}>{children}</section>;
+  return <section className={cn("glass card-glow rounded p-5", className)}>{children}</section>;
 }

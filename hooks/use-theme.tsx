@@ -19,7 +19,7 @@ interface ThemeContextValue {
 }
 
 const STORAGE_KEY = "luguel-admin-theme";
-const DEFAULT_THEME: ThemeMode = "dark";
+const DEFAULT_THEME: ThemeMode = "light";
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 

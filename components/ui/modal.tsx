@@ -17,14 +17,14 @@ export function Modal({ title, open, onClose, children, className }: ModalProps)
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4">
-      <div className={cn("glass w-full max-w-lg rounded-2xl p-6", className)}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm">
+      <div className={cn("glass w-full max-w-lg rounded p-6", className)}>
         <header className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-shell-foreground">{title}</h2>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg px-2 py-1 text-sm text-shell-foreground-dim hover:bg-shell-muted"
+            className="rounded-sm px-2 py-1 text-sm text-shell-foreground-dim hover:bg-shell-muted"
           >
             Fechar
           </button>
